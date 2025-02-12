@@ -5,11 +5,10 @@
   box-sizing: border-box;
 }
 
-body {
-  font-family: Arial, sans-serif;
-  line-height: 1.6;
+html, body {
+  height: 100%;
+  overflow-y: auto; /* Enable vertical scrolling */
 }
-
 #root {
   display: flex;
   flex-direction: column;
