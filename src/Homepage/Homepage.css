@@ -19,8 +19,8 @@ html, body {
   width: 100%;
   max-width: 1420px;
   margin: 0 auto;
+  min-height: 100vh; /* Ensure content can extend beyond viewport */
 }
-
 /* Header */
 .homepage-header-section {
   background-color: #003366;
