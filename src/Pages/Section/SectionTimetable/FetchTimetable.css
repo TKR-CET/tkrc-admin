@@ -1,0 +1,184 @@
+/* Timetable Container */
+.timetable-container {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #ffffff;
+  font-family: "Arial", sans-serif;
+}
+
+/* Title Styling */
+.timetable-title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Form Styling */
+.form-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* Ensures proper vertical alignment */
+  flex-wrap: wrap;
+  margin-bottom: 15px;
+  gap: 10px;
+}
+
+.form-group label {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.form-group select {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  background: #f9f9f9;
+}
+
+/* Button Wrapper */
+.button-wrapper {
+  display: flex;
+  justify-content: center; /* Centers button */
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* Fetch Button */
+.fetch-button {
+  width: 100%;
+  max-width: 200px; /* Prevents stretching */
+  padding: 12px;
+  background: #5c9ded;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  text-align: center;
+}
+
+.fetch-button:hover {
+  background: #4a86cf;
+}
+
+/* Timetable Table */
+.timetable-table-container {
+  margin-top: 20px;
+  overflow-x: auto;
+}
+
+.timetable-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+  background: #fdfdfd;
+}
+
+/* Table Header */
+.timetable-table thead {
+  background: #dfeeff;
+  color: #333;
+}
+
+.timetable-table th {
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+}
+
+/* Day Column */
+.timetable-table td:first-child {
+  font-weight: bold;
+  background: #f7d794;
+  color: #444;
+  padding: 12px;
+  border-right: 2px solid white;
+}
+
+/* Periods */
+.timetable-table td {
+  padding: 12px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+}
+
+/* Lunch Period Styling */
+.lunch-period {
+  font-weight: bold;
+  color: white;
+  background: #f5a623;
+  padding: 10px;
+  border-radius: 3px;
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+  .timetable-container {
+    width: 90%;
+    padding: 18px;
+  }
+
+  .timetable-title {
+    font-size: 22px;
+  }
+
+  .form-group {
+    flex-direction: column;
+    align-items: stretch; /* Ensures inputs and button are full width */
+  }
+
+  .form-group select {
+    font-size: 15px;
+    padding: 8px;
+  }
+
+  .button-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .fetch-button {
+    font-size: 15px;
+    padding: 10px;
+    max-width: 180px;
+  }
+}
+
+@media (max-width: 480px) {
+  .timetable-container {
+    width: 95%;
+    padding: 10px;
+  }
+
+  .timetable-title {
+    font-size: 18px;
+  }
+
+  .form-group label {
+    font-size: 14px;
+  }
+
+  .form-group select {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .button-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .fetch-button {
+    font-size: 14px;
+    padding: 8px;
+    max-width: 160px;
+  }
+}

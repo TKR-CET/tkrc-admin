@@ -1,0 +1,226 @@
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap') !important;
+
+/* General Layout */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  font-family: "Poppins", sans-serif;
+  background-color: #f4f7fc;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+/* Main Container */
+.container {
+  max-width: 1000px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #ffffff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  height: auto;
+}
+
+/* Heading */
+.heading {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+/* Input Section */
+.input-section {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  gap: 10px;
+}
+
+.input-box {
+  width: 250px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.fetch-btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  color: #fff;
+  background: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.fetch-btn:hover {
+  background: #0056b3;
+}
+
+#overall {
+  color: red;
+}
+
+/* Messages */
+.loading-msg,
+.error-msg {
+  text-align: center;
+  font-size: 18px;
+  color: red;
+}
+
+/* Table Wrapper */
+.table-wrapper {
+  margin-top: 20px;
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* Tables */
+.info-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  min-width: 600px;
+}
+
+.info-table th,
+.info-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+.info-table th {
+  background: #DDA853;
+  color: black;
+  text-transform: uppercase;
+}
+
+/* Student Image */
+.image-column {
+  text-align: center;
+}
+
+.student-pic {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  border: 3px solid #007bff;
+}
+
+/* Attendance Cells */
+.present-cell {
+  color: black;
+}
+
+.absent-cell {
+  color: #dc3545;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+  .container {
+    padding: 18px;
+  }
+
+  .heading {
+    font-size: 22px;
+  }
+
+  .input-box {
+    width: 220px;
+    font-size: 15px;
+  }
+
+  .fetch-btn {
+    font-size: 15px;
+  }
+
+  .info-table th, .info-table td {
+    font-size: 15px;
+    padding: 8px;
+  }
+
+  .student-pic {
+    width: 90px;
+    height: 90px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+
+  .heading {
+    font-size: 20px;
+  }
+
+  .input-section {
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .input-box {
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .fetch-btn {
+    width: 100%;
+    max-width: 150px;
+  }
+
+  .info-table {
+    min-width: 100%;
+  }
+
+  .info-table th, .info-table td {
+    padding: 8px;
+    font-size: 14px;
+  }
+
+  .student-pic {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .heading {
+    font-size: 18px;
+  }
+
+  .input-box {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .fetch-btn {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .info-table th, .info-table td {
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  .student-pic {
+    width: 70px;
+    height: 70px;
+  }
+}

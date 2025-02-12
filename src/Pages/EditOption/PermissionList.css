@@ -1,0 +1,105 @@
+/* PermissionList.css */
+
+/* General Container Styling */
+.container {
+    max-width: 90%;
+    margin: 30px auto;
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+    background: #ffffff;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+/* Title Styling */
+.title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Table Container */
+.table-container {
+    overflow-x: auto; /* Makes the table scrollable on small screens */
+}
+
+/* Table Styling */
+.styled-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+}
+
+/* Table Header */
+.styled-table thead {
+    background-color: #007bff;
+    color: white;
+    text-transform: uppercase;
+}
+
+.styled-table th, .styled-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+/* Alternating Row Colors */
+.styled-table tbody tr:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+.styled-table tbody tr:nth-child(even) {
+    background-color: #ffffff;
+}
+
+/* Hover Effect */
+.styled-table tbody tr:hover {
+    background-color: #f1f1f1;
+    transition: background 0.3s;
+}
+
+/* Button Styling */
+.cancel-btn {
+    padding: 8px 12px;
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 14px;
+    transition: background 0.3s ease-in-out;
+}
+
+.cancel-btn:hover {
+    background-color: #c0392b;
+}
+
+/* Responsive Table */
+@media (max-width: 768px) {
+    .styled-table th, .styled-table td {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    .cancel-btn {
+        font-size: 12px;
+        padding: 6px 10px;
+    }
+}
+
+/* Loading and Error Messages */
+.loading, .error {
+    text-align: center;
+    font-size: 16px;
+    margin-top: 20px;
+}
+
+.loading {
+    color: #007bff;
+}
+
+.error {
+    color: red;
+}

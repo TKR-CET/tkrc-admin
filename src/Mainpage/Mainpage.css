@@ -1,0 +1,195 @@
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap') ;
+
+/* General Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  font-family: "Poppins", sans-serif;
+  background-color: #f4f7fc;
+  color: #333;
+  height: 100%;
+  overflow: hidden; /* Prevent overall scrolling */
+}
+
+/* Main Container */
+.main-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden; /* Ensures only content scrolls */
+}
+
+/* Header */
+.header {
+  width: 100%;
+  height: 60px;
+  background-color: #003366; /* Dark blue */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: white;
+  padding: 0 20px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+/* Menu Button */
+.menu-button {
+  font-size: 24px;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  display: none;
+}
+
+/* Wrapper */
+.wrapper {
+  display: flex;
+  flex: 1;
+  height: calc(100vh - 60px); /* Take up full height minus header */
+  width: 100%;
+  overflow: hidden; /* Prevent scrolling in wrapper */
+}
+
+/* Sidebar */
+.sidebar {
+  width: 260px;
+  background-color: #002f5e; /* Dark navy blue */
+  color: white;
+  padding: 20px;
+  flex-shrink: 0;
+  overflow-y: auto; /* Sidebar scrolls if needed */
+  height: 100%;
+}
+
+/* Sidebar Title */
+.sidebar-title {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: #ffcc00; /* Gold color for contrast */
+  font-weight: bold;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+/* Sidebar Menu */
+.menu {
+  list-style: none;
+}
+
+.menu li {
+  margin-bottom: 15px;
+}
+
+.menu li span,
+.menu li a {
+  color: white;
+  text-decoration: none;
+  display: block;
+  padding: 10px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+#h1{
+  font-size:16px;
+}
+.menu li span:hover,
+.menu li a:hover {
+  color: yellow; /* Medium blue */
+}
+
+/* Submenu */
+.submenu {
+  list-style: none;
+  padding-left: 15px;
+  display: none;
+}
+
+.menu li.active .submenu {
+  display: block;
+}
+
+.submenu li a {
+  font-size: 14px;
+  padding: 8px;
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.submenu li a:hover {
+  background-color: #004080; /* Darker blue */
+}
+
+/* Content Section */
+.content-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  overflow-y: auto; /* Enable scrolling inside content */
+  height: 100%;
+  padding: 20px;
+  background-color: #f8f9fa;
+}
+
+/* Content Wrapper */
+.content-wrapper {
+  max-width: 1100px;
+  width: 100%;
+  background-color: white;
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .menu-button {
+    display: block;
+  }
+
+  .sidebar {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 250px;
+    height: calc(100vh - 60px);
+    transform: translateX(-100%);
+    z-index: 1000;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+}
+
+/* Logout Button */
+.logout-button {
+  background-color: #d9534f;
+  color: white;
+  border: none;
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.3s ease-in-out;
+}
+
+.logout-button:hover {
+  background-color: #c9302c;
+}

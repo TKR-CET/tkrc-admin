@@ -1,0 +1,222 @@
+/* General Styling */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  font-family: "Arial", sans-serif;
+  background-color: #f4f7fc;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+/* Container Styling */
+.fetch-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-family: "Arial", sans-serif;
+  overflow: hidden;
+}
+
+/* Title Styling */
+.fetch-title {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* Form Group */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.form-group select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Fetch Button */
+.fetch-button {
+  width: 100%;
+  max-width: 300px;  /* Ensures the button doesn't stretch too much */
+  margin: 10px auto; /* Centers the button */
+  display: block;  /* Makes sure it is centered */
+  padding: 12px;
+  background-color: #007bff;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+  font-size: 16px;
+  text-align: center;
+}
+
+.fetch-button:hover {
+  background-color: #0056b3;
+}
+
+/* Message Styling */
+.loading-message,
+.error-message,
+.success-message {
+  text-align: center;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.error-message {
+  color: red;
+}
+
+.success-message {
+  color: green;
+}
+
+/* Student List */
+.student-list {
+  margin-top: 20px;
+}
+
+.student-list h3 {
+  text-align: center;
+  font-size: 20px;
+  color: #333;
+}
+
+/* Student Table Container */
+.student-table-container {
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  overflow-x: auto; /* Ensures responsiveness for smaller screens */
+}
+
+.student-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.student-table th,
+.student-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+  word-wrap: break-word;
+  font-size: 14px;
+}
+
+.student-table th {
+  background-color: #f4f4f4;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Student Image */
+.student-img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 10px;
+  display: block;
+  margin: auto;
+}
+
+/* Delete Button */
+.delete-cell {
+  text-align: center;
+}
+
+.delete-button {
+  padding: 6px 12px;
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background 0.3s;
+}
+
+.delete-button:hover {
+  background-color: #cc0000;
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+  .fetch-container {
+    width: 90%;
+    padding: 15px;
+  }
+
+  .form-group {
+    width: 100%;
+  }
+
+  .fetch-button {
+    width: 90%;  /* Full width button on mobile */
+    max-width: 250px;
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .student-table-container {
+    overflow-x: auto;
+  }
+
+  .student-table th,
+  .student-table td {
+    font-size: 13px;
+    padding: 8px;
+  }
+
+  .student-img {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .fetch-container {
+    width: 95%;
+    padding: 10px;
+  }
+
+  .fetch-button {
+    width: 100%; /* Ensures full width */
+    max-width: 220px;
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .student-table th,
+  .student-table td {
+    font-size: 12px;
+    padding: 6px;
+  }
+
+  .student-img {
+    width: 70px;
+    height: 70px;
+  }
+}

@@ -1,0 +1,95 @@
+/* Container Styling */
+.attendance-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #ffffff;
+
+  font-family: "Arial", sans-serif;
+}
+
+/* Title */
+.attendance-title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Form Styling */
+.form-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: bold;
+}
+
+.form-group select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  background: #f9f9f9;
+  width:200px;
+}
+
+/* Fetch Button */
+.fetch-button {
+  padding: 10px 15px;
+  background: orange;
+  color: white;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  width:300px;
+}
+
+.fetch-button:hover {
+  background: #4a86cf;
+}
+
+/* Table Styling */
+.attendance-table-container {
+  margin-top: 20px;
+  overflow-x: auto;
+}
+
+.attendance-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+  background: #fdfdfd;
+}
+
+/* Table Header */
+.attendance-table thead {
+  background: #dfeeff;
+  color: #333;
+}
+
+.attendance-table th {
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+}
+
+/* Table Data */
+.attendance-table td {
+  padding: 12px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+}
+
+/* Low Attendance Highlight */
+.low-attendance {
+  color: red;
+  font-weight: bold;
+}

@@ -1,0 +1,12 @@
+.video {
+  width: 100%;
+  height: auto;
+  position: relative;
+  top: 1px;
+}
+@media (max-width: 768px) {
+  .video{
+    position: relative;
+    top:20px;
+  }
+}

@@ -1,0 +1,145 @@
+/* Container for the form */
+.add-faculty-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+/* Form Heading */
+.add-faculty-container h2 {
+  font-size: 2rem;
+  color: #2c3e50;
+  text-align: center;
+}
+
+/* Form styling */
+.faculty-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Input Group */
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.input-group label {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.input-group input,
+.input-group textarea {
+  padding: 12px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-sizing: border-box;
+  width: 100%;
+  transition: border-color 0.3s ease;
+}
+
+.input-group input:focus,
+.input-group textarea:focus {
+  border-color: #e74c3c;
+  outline: none;
+}
+
+/* Textarea for timetable */
+.input-group textarea {
+  resize: vertical;
+  height: 120px; /* Default height for larger screens */
+}
+
+/* Submit Button */
+.submit-btn {
+  background-color: #e74c3c;
+  color: white;
+  font-weight: bold;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.submit-btn:hover {
+  background-color: #c0392b;
+}
+
+/* Error Message */
+.error-message {
+  color: red;
+  font-size: 0.9rem;
+}
+
+/* Response Message */
+.response-message {
+  color: green;
+  font-size: 1rem;
+  margin-top: 20px;
+}
+
+/* Responsive Styles */
+
+/* For Laptop Screens */
+@media (max-width: 1024px) {
+  .add-faculty-container {
+    padding: 15px;
+  }
+
+  .input-group input,
+  .input-group textarea {
+    font-size: 1rem;
+  }
+
+  .input-group textarea {
+    height: 100px; /* Adjust textarea height for laptops */
+  }
+}
+
+/* For Mobile Devices */
+@media (max-width: 768px) {
+  .add-faculty-container {
+    padding: 10px;
+  }
+
+  .input-group input,
+  .input-group textarea {
+    font-size: 1rem;
+    padding: 10px;
+  }
+
+  .input-group textarea {
+    height: 80px; /* Reduced height for smaller screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .add-faculty-container {
+    padding: 10px;
+  }
+
+  .input-group input,
+  .input-group textarea {
+    font-size: 0.9rem;
+    padding: 8px;
+  }
+
+  .input-group textarea {
+    height: 60px; /* Further reduced height for very small screens */
+  }
+}

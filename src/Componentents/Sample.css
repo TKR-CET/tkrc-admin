@@ -1,0 +1,11 @@
+.faculty-image {
+  width: 100%;
+  max-width: 1060px;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .faculty-image {
+    height: 250px; /* Adjust height for mobile */
+  }
+}

@@ -1,0 +1,204 @@
+/* General Reset and Layout */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.homepage-main {
+  width: 100%;
+  max-width: 1420px;
+  margin: 0 auto;
+}
+
+/* Header */
+.homepage-header-section {
+  background-color: #003366;
+  color: #fff;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+justify-content: center;
+  text-align: center;
+  width:100%;
+  gap:5px
+
+}
+
+#homepage-logo {
+  width: 100px;
+  
+  margin-bottom: 10px;
+  
+  
+}
+
+.header-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+/* Carousel */
+.carousel-section {
+  margin-top: 20px;
+}
+
+.carousel-image {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* About Section */
+.about-section {
+  padding: 40px 20px;
+  background-color: #f4f4f4;
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+.section-heading {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #003366;
+}
+
+.about-content {
+  font-size: 1rem;
+  color: #333;
+  line-height: 1.8;
+  text-align: justify;
+}
+
+/* Login Section */
+.login-section {
+  padding: 40px 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  margin-top: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+  align-items: center;
+}
+
+.login-section h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #003366;
+  margin-bottom: 20px;
+
+}
+
+.login-input {
+  width: 30%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.login-button {
+  width: 30%;
+  padding: 12px;
+  background-color: #003366;
+  color: white;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.login-button:hover {
+  background-color: #00509e;
+}
+
+/* Footer */
+.main-footer {
+  background-color: #003366;
+  color: #fff;
+  text-align: center;
+  padding: 20px;
+  margin-top: 40px;
+}
+
+.footer-text {
+  font-size: 1rem;
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+  .homepage-header-section {
+    padding: 15px;
+  }
+
+  .header-title {
+    font-size: 1.25rem;
+  }
+
+  .carousel-image {
+    height: 300px;
+  }
+
+  .about-section,
+  .login-section {
+    padding: 30px 15px;
+  }
+
+  .about-content {
+    font-size: 0.9rem;
+  }
+
+  .login-input, .login-button {
+    font-size: 0.9rem;
+    width:50%;
+  }
+}
+
+@media (max-width: 480px) {
+  .homepage-header-section {
+    padding: 10px;
+  }
+
+  .header-title {
+    font-size: 1rem;
+  }
+
+  .carousel-image {
+    height: 250px;
+  }
+
+  .about-section,
+  .login-section {
+    padding: 20px 10px;
+  }
+
+  .about-content {
+    font-size: 0.85rem;
+  }
+
+  .login-input, .login-button {
+    font-size: 0.85rem;
+  }
+
+  .footer-text {
+    font-size: 0.85rem;
+  }
+}

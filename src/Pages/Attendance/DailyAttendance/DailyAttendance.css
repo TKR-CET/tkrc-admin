@@ -1,0 +1,225 @@
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap') !important;
+
+/* General Styling */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  font-family: "Poppins", sans-serif;
+  background-color: #f4f7fc;
+  color: #333;
+  height: 100%;
+  overflow-x: hidden;
+}
+
+/* Main Container */
+.attendance-container {
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Title */
+.attendance-title {
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+/* Input Fields in a Single Row */
+.attendance-inputs {
+  display: flex;
+  align-items: center;
+  gap: 6px !important;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.attendance-inputs label {
+  font-weight: bold;
+}
+
+.attendance-inputs select,
+.attendance-inputs input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 14px;
+  width: 100%;
+  max-width: 120px;
+}
+
+.attendance-inputs button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+  font-size: 14px;
+}
+
+.attendance-inputs button:hover {
+  background-color: #0056b3;
+}
+
+/* Responsive Input Fields */
+@media (max-width: 768px) {
+  .attendance-inputs {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .attendance-inputs select,
+  .attendance-inputs input,
+  .attendance-inputs button {
+    max-width: 100%;
+    width: 100%;
+  }
+}
+
+/* Table Styling */
+.attendance-table-container {
+  overflow-x: auto;
+}
+
+.attendance-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+  min-width: 600px;
+}
+
+.attendance-table th,
+.attendance-table td {
+  padding: 12px;
+  border: 1px solid #ddd;
+}
+
+.attendance-table th {
+  background-color: #007bff;
+  color: white;
+  text-transform: uppercase;
+}
+
+/* Style for "Not Taken" Periods */
+.attendance-table td.not-taken {
+  background-color: #ffe6e6;
+  color: #d9534f;
+  font-weight: bold;
+  font-style: italic;
+  text-transform: uppercase;
+}
+
+/* Hover Effect */
+.attendance-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Responsive Table */
+@media (max-width: 768px) {
+  .attendance-table th,
+  .attendance-table td {
+    font-size: 12px;
+    padding: 8px;
+  }
+}
+
+/* Popup Overlay */
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+}
+
+/* Popup Box */
+.popup-box {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  max-width: 400px;
+  width: 90%;
+}
+
+.popup-box h3 {
+  margin-bottom: 10px;
+  color: #333;
+  font-size: 1.4rem;
+}
+
+.popup-box h4 {
+  margin-top: 15px;
+  color: #007bff;
+}
+
+.popup-box p {
+  background: #f8f9fa;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.popup-box button {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.popup-box button:hover {
+  background: #0056b3;
+}
+
+/* Clickable Count */
+.clickable {
+  cursor: pointer;
+  color: #007bff;
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.clickable:hover {
+  color: #0056b3;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 480px) {
+  .attendance-title {
+    font-size: 1.5rem;
+  }
+
+  .popup-box {
+    max-width: 300px;
+  }
+
+  .attendance-table th,
+  .attendance-table td {
+    font-size: 11px;
+    padding: 6px;
+  }
+}
