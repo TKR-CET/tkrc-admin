@@ -8,7 +8,7 @@ const Sample= () => {
       {/* Static Image */}
       <div className="image-container">
         <img 
-          src="../../public/images/campus.webp" 
+          src="/images/campus.webp" 
           alt="Faculty" 
           className="faculty-image"
         />
