@@ -71,6 +71,8 @@ const StudentAttendance = () => {
         return;
       }
 
+      console.log("Attendance Data:", attendanceData); // Debugging log
+
       setAttendanceInfo(attendanceData);
     } catch (error) {
       setErrorMsg("Error retrieving student or attendance data.");
@@ -164,38 +166,35 @@ const StudentAttendance = () => {
               </tbody>
             </table>
           </div>
-                   {/* Daily Attendance Summary */}
+
+          {/* Daily Attendance Summary */}
           <div className="daily-attendance">
             <h2>Daily Attendance</h2>
             <table className="t2">
               <thead>
                 <tr>
                   <th>Date</th>
-                  <th>1</th>
-                  <th>2</th>
-                  <th>3</th>
-                  <th>4</th>
-                  <th>5</th>
-                  <th>6</th>
+                  <th>9:40 - 10:40</th>
+                  <th>10:40 - 11:40</th>
+                  <th>11:40 - 12:40</th>
+                  <th>1:20 - 2:20</th>
+                  <th>2:20 - 3:20</th>
+                  <th>3:20 - 4:20</th>
                   <th>Total</th>
                   <th>Attended</th>
                 </tr>
               </thead>
               <tbody>
-                {Object.entries(attendance.dailySummary).map(
-                  ([date, data], index) => (
+                {attendanceInfo.dailySummary &&
+                  Object.entries(attendanceInfo.dailySummary).map(([date, data], index) => (
                     <tr key={index}>
                       <td>{date}</td>
                       {[1, 2, 3, 4, 5, 6].map((period) => {
-                        const periodData = data.periods[period];
+                        const periodData = data.periods?.[period];
                         return (
                           <td
                             key={period}
-                            className={
-                              periodData?.status === "present"
-                                ? "present-cell"
-                                : "absent-cell"
-                            }
+                            className={periodData?.status === "present" ? "present-cell" : "absent-cell"}
                           >
                             {periodData?.subject || "-"}
                           </td>
@@ -204,12 +203,10 @@ const StudentAttendance = () => {
                       <td>{data.total}</td>
                       <td>{data.attended}</td>
                     </tr>
-                  )
-                )}
+                  ))}
               </tbody>
             </table>
           </div>
-
         </>
       )}
     </div>
