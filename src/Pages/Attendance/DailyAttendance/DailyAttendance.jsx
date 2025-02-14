@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./DailyAttendance.css"; 
+import "./DailyAttendance.css";
 
 const AttendanceSummary = () => {
   const years = ["B.Tech I", "B.Tech II", "B.Tech III", "B.Tech IV"];
@@ -19,15 +19,21 @@ const AttendanceSummary = () => {
   const [year, setYear] = useState(years[0]);
   const [department, setDepartment] = useState(departments[0]);
   const [section, setSection] = useState(sections[0]);
+  const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
+
+  const [subjects, setSubjects] = useState([]);
   const [attendanceData, setAttendanceData] = useState({});
   const [userDepartment, setUserDepartment] = useState("");
-  const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
   const [selectedPeriod, setSelectedPeriod] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
     fetchUserDepartment();
   }, []);
+
+  useEffect(() => {
+    fetchSubjectsForDay();
+  }, [year, department, section, date]); // Auto-fetch subjects on change
 
   const fetchUserDepartment = async () => {
     const facultyId = localStorage.getItem("facultyId");
@@ -45,6 +51,18 @@ const AttendanceSummary = () => {
     }
   };
 
+  const fetchSubjectsForDay = async () => {
+    try {
+      const response = await axios.get(
+        `https://tkrcet-backend-g3zu.onrender.com/Section/subjects-day/${year}/${department}/${section}/${date}`
+      );
+      setSubjects(response.data.periods || []);
+    } catch (error) {
+      console.error("Error fetching subjects:", error);
+      setSubjects([]);
+    }
+  };
+
   const fetchAttendance = async () => {
     try {
       const response = await axios.get(
@@ -54,6 +72,7 @@ const AttendanceSummary = () => {
       setAttendanceData(response.data.attendance || {});
     } catch (error) {
       console.error("Error fetching attendance:", error);
+      setAttendanceData({});
     }
   };
 
@@ -100,7 +119,7 @@ const AttendanceSummary = () => {
         <label>Date:</label>
         <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
 
-        <button onClick={fetchAttendance}>Submit</button>
+        <button onClick={fetchAttendance}>Fetch Attendance</button>
       </div>
 
       {/* Attendance Table */}
@@ -108,38 +127,39 @@ const AttendanceSummary = () => {
         <table className="attendance-table">
           <thead>
             <tr>
-              <th>Timing</th>
-              <th>Subject</th>
+              <th>Timing - Fetched Subject</th>
+              <th>Attendance Subject</th>
               <th>Present</th>
               <th>Absent</th>
-              <th>Total </th>
+              <th>Total</th>
             </tr>
           </thead>
-<tbody>
-  {periodTimings.map((timing, index) => {
-    const periodKey = Object.keys(attendanceData).find((p) => p.startsWith(`Period ${index + 1}`));
-    const periodData = attendanceData[periodKey] || {};
-    const subject = periodKey ? periodKey.split(" - ")[1] : "Not Taken";
+          <tbody>
+            {periodTimings.map((timing, index) => {
+              const subjectData = subjects[index] || {};
+              const periodKey = Object.keys(attendanceData).find((p) => p.startsWith(`Period ${index + 1}`));
+              const periodData = attendanceData[periodKey] || {};
+              const attendanceSubject = periodKey ? periodKey.split(" - ")[1] : "Not Taken";
 
-    const presentCount = periodData.presentCount !== undefined ? periodData.presentCount : (periodData.absentCount > 0 ? 0 : "Not Taken");
-    const absentCount = periodData.absentCount !== undefined ? periodData.absentCount : (periodData.presentCount > 0 ? 0 : "Not Taken");
-    const totalStrength = presentCount !== "Not Taken" && absentCount !== "Not Taken" ? presentCount + absentCount : "Not Taken";
+              const presentCount = periodData.presentCount !== undefined ? periodData.presentCount : "Not Taken";
+              const absentCount = periodData.absentCount !== undefined ? periodData.absentCount : "Not Taken";
+              const totalStrength = presentCount !== "Not Taken" && absentCount !== "Not Taken" ? presentCount + absentCount : "Not Taken";
 
-    return (
-      <tr key={index}>
-        <td>{timing}</td>
-        <td className={periodKey ? "" : "not-taken"}>{subject}</td>
-        <td className={periodKey ? "clickable" : "not-taken"} onClick={periodKey ? () => handleShowPopup(periodData) : null}>
-          {presentCount}
-        </td>
-        <td className={periodKey ? "clickable" : "not-taken"} onClick={periodKey ? () => handleShowPopup(periodData) : null}>
-          {absentCount}
-        </td>
-        <td className="total-strength">{totalStrength}</td>
-      </tr>
-    );
-  })}
-</tbody>
+              return (
+                <tr key={index}>
+                  <td>{`${timing} - ${subjectData.subject || "Not Available"}`}</td>
+                  <td className={periodKey ? "" : "not-taken"}>{attendanceSubject}</td>
+                  <td className={periodKey ? "clickable" : "not-taken"} onClick={periodKey ? () => handleShowPopup(periodData) : null}>
+                    {presentCount}
+                  </td>
+                  <td className={periodKey ? "clickable" : "not-taken"} onClick={periodKey ? () => handleShowPopup(periodData) : null}>
+                    {absentCount}
+                  </td>
+                  <td className="total-strength">{totalStrength}</td>
+                </tr>
+              );
+            })}
+          </tbody>
         </table>
       </div>
 
