@@ -62,7 +62,7 @@ html, body {
 
 .attendance-inputs button {
   padding: 10px 20px;
-  background-color: #007bff;
+  background-color: red;
   color: white;
   border: none;
   border-radius: 5px;
