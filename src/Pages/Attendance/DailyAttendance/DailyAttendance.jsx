@@ -119,7 +119,7 @@ const AttendanceSummary = () => {
         <label>Date:</label>
         <input type="date" value={date} onChange={(e) => setDate(e.target.value)} />
 
-        <button onClick={fetchAttendance}>Fetch Attendance</button>
+        <button onClick={fetchAttendance}>Submit</button>
       </div>
 
       {/* Attendance Table */}
