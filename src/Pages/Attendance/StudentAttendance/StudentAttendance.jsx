@@ -164,7 +164,51 @@ const StudentAttendance = () => {
               </tbody>
             </table>
           </div>
-
+                   {/* Daily Attendance Summary */}
+          <div className="daily-attendance">
+            <h2>Daily Attendance</h2>
+            <table className="t2">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>1</th>
+                  <th>2</th>
+                  <th>3</th>
+                  <th>4</th>
+                  <th>5</th>
+                  <th>6</th>
+                  <th>Total</th>
+                  <th>Attended</th>
+                </tr>
+              </thead>
+              <tbody>
+                {Object.entries(attendance.dailySummary).map(
+                  ([date, data], index) => (
+                    <tr key={index}>
+                      <td>{date}</td>
+                      {[1, 2, 3, 4, 5, 6].map((period) => {
+                        const periodData = data.periods[period];
+                        return (
+                          <td
+                            key={period}
+                            className={
+                              periodData?.status === "present"
+                                ? "present-cell"
+                                : "absent-cell"
+                            }
+                          >
+                            {periodData?.subject || "-"}
+                          </td>
+                        );
+                      })}
+                      <td>{data.total}</td>
+                      <td>{data.attended}</td>
+                    </tr>
+                  )
+                )}
+              </tbody>
+            </table>
+          </div>
 
         </>
       )}
