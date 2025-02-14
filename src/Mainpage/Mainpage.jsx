@@ -39,6 +39,10 @@ const Mainpage = () => {
     navigate("/");
   };
 
+  const closeSidebar = () => {
+    setSidebarOpen(false);
+  };
+
   return (
     <div className="main-container">
       {/* Header Section */}
@@ -61,11 +65,11 @@ const Mainpage = () => {
               <ul className="submenu">
                 {role !== "HOD" && role !== "hod" && (
                   <>
-                    <li><Link to="/main/addfaculty">Add Faculty</Link></li>
-                    <li><Link to="/main/facultylist">Faculty Details</Link></li>
+                    <li><Link to="/main/addfaculty" onClick={closeSidebar}>Add Faculty</Link></li>
+                    <li><Link to="/main/facultylist" onClick={closeSidebar}>Faculty Details</Link></li>
                   </>
                 )}
-                <li><Link to="/main/facultytable">Faculty Timetable</Link></li>
+                <li><Link to="/main/facultytable" onClick={closeSidebar}>Faculty Timetable</Link></li>
               </ul>
             </li>
 
@@ -74,22 +78,22 @@ const Mainpage = () => {
               <li className={activeMenu === "student" ? "active" : ""}>
                 <span onClick={() => toggleMenu("student")}>Student</span>
                 <ul className="submenu">
-                  <li><Link to="/main/addstudent">Add Students</Link></li>
-                  <li><Link to="/main/studentDetails">Student Details</Link></li>
+                  <li><Link to="/main/addstudent" onClick={closeSidebar}>Add Students</Link></li>
+                  <li><Link to="/main/studentDetails" onClick={closeSidebar}>Student Details</Link></li>
                 </ul>
               </li>
             )}
 
             {/* Section Timetable */}
-            <li><Link to="/main/studentTable">Section Timetable</Link></li>
+            <li><Link to="/main/studentTable" onClick={closeSidebar}>Section Timetable</Link></li>
 
             {/* Edit Option Enabling */}
             {role !== "HOD" && role !== "hod" && (
               <li className={activeMenu === "editOption" ? "active" : ""}>
                 <span onClick={() => toggleMenu("editOption")}>Edit Option</span>
                 <ul className="submenu">
-                  <li><Link to="/main/grant">Grant Permissions</Link></li>
-                  <li><Link to="/main/permission">Permissions List</Link></li>
+                  <li><Link to="/main/grant" onClick={closeSidebar}>Grant Permissions</Link></li>
+                  <li><Link to="/main/permission" onClick={closeSidebar}>Permissions List</Link></li>
                 </ul>
               </li>
             )}
@@ -98,9 +102,9 @@ const Mainpage = () => {
             <li className={activeMenu === "attendance" ? "active" : ""}>
               <span onClick={() => toggleMenu("attendance")}>Attendance</span>
               <ul className="submenu">
-                <li><Link to="/main/attendance">Section Attendance</Link></li>
-                <li><Link to="/main/student">Student Attendance</Link></li>
-                <li><Link to="/main/daily">Daily Attendance</Link></li>
+                <li><Link to="/main/attendance" onClick={closeSidebar}>Section Attendance</Link></li>
+                <li><Link to="/main/student" onClick={closeSidebar}>Student Attendance</Link></li>
+                <li><Link to="/main/daily" onClick={closeSidebar}>Daily Attendance</Link></li>
               </ul>
             </li>
 
