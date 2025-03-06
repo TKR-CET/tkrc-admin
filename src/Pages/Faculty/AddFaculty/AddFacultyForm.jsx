@@ -14,6 +14,7 @@ const AddFacultyForm = () => {
     experience: "",
     areaOfInterest: "",
     jntuId: "",
+    phoneNumber: "", // New field added
     password: "",
     timetable: "",
   });
@@ -21,9 +22,21 @@ const AddFacultyForm = () => {
   const [image, setImage] = useState(null);
   const [responseMessage, setResponseMessage] = useState("");
   const [timetableError, setTimetableError] = useState("");
+  const [phoneError, setPhoneError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    // Validate phone number format (Optional, assumes a 10-digit number)
+    if (name === "phoneNumber") {
+      const phoneRegex = /^[0-9]{10}$/;
+      if (!phoneRegex.test(value)) {
+        setPhoneError("Invalid phone number format (must be 10 digits)");
+      } else {
+        setPhoneError("");
+      }
+    }
+
     setFormData({ ...formData, [name]: value });
   };
 
@@ -33,6 +46,8 @@ const AddFacultyForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (phoneError) return; // Prevent submission if phone number is invalid
 
     try {
       const parsedTimetable = JSON.parse(formData.timetable);
@@ -80,6 +95,7 @@ const AddFacultyForm = () => {
           { label: "Experience (in years)", name: "experience", type: "text" },
           { label: "Area of Interest (comma-separated)", name: "areaOfInterest", type: "text" },
           { label: "JNTU ID", name: "jntuId", type: "text" },
+          { label: "Phone Number", name: "phoneNumber", type: "text" }, // New field
           { label: "Password", name: "password", type: "password" },
         ].map(({ label, name, type }) => (
           <div className="input-group" key={name}>
@@ -92,6 +108,7 @@ const AddFacultyForm = () => {
               onChange={handleChange}
               required
             />
+            {name === "phoneNumber" && phoneError && <p className="error-message">{phoneError}</p>}
           </div>
         ))}
 
@@ -113,7 +130,7 @@ const AddFacultyForm = () => {
           <input type="file" id="image" accept="image/*" onChange={handleImageChange} />
         </div>
 
-        <button type="submit" className="submit-btn" disabled={timetableError}>
+        <button type="submit" className="submit-btn" disabled={timetableError || phoneError}>
           Add Faculty
         </button>
       </form>
