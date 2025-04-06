@@ -1,69 +1,66 @@
 import React, { useState } from "react";
+import * as XLSX from "xlsx";
 import axios from "axios";
-import "./AddStudent.css"; // Import the professional CSS file
+import "./AddStudent.css";
 
 const AddStudent = () => {
-  const [formData, setFormData] = useState({
-    rollNumber: "",
-    name: "",
-    fatherName: "",
-    mobileNumber: "",
-    fatherMobileNumber: "",
-    password: "",
-    role: "student",
-    year: "B.Tech I",
-    department: "CSD",
-    section: "A",
-  });
-
-  const [image, setImage] = useState(null);
+  const [excelData, setExcelData] = useState([]);
+  const [year, setYear] = useState("B.Tech I");
+  const [department, setDepartment] = useState("CSD");
+  const [section, setSection] = useState("A");
   const [responseMessage, setResponseMessage] = useState("");
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
-  };
+  const handleExcelUpload = (e) => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
 
-  const handleImageChange = (e) => {
-    setImage(e.target.files[0]);
+    reader.onload = (evt) => {
+      const bstr = evt.target.result;
+      const workbook = XLSX.read(bstr, { type: "binary" });
+      const sheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[sheetName];
+      const data = XLSX.utils.sheet_to_json(worksheet);
+      setExcelData(data);
+    };
+
+    reader.readAsBinaryString(file);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!excelData.length) {
+      setResponseMessage("Please upload an Excel file.");
+      return;
+    }
+
     try {
-      const data = new FormData();
-      const studentData = {
-        rollNumber: formData.rollNumber,
-        name: formData.name,
-        fatherName: formData.fatherName,
-        mobileNumber: formData.mobileNumber,
-        fatherMobileNumber: formData.fatherMobileNumber,
-        password: formData.password,
-        role: formData.role,
-      };
+      const studentsWithExtraData = excelData.map((student) => ({
+        ...student,
+        role: "student",
+      }));
 
-      data.append("students", JSON.stringify([studentData]));
-      if (image) data.append("image", image);
+      const formData = new FormData();
+      formData.append("students", JSON.stringify(studentsWithExtraData));
 
-      const apiUrl = `https://tkrcet-backend-g3zu.onrender.com/Section/${formData.year}/${formData.department}/${formData.section}/students`;
+      const apiUrl = `https://tkrcet-backend-g3zu.onrender.com/Section/${year}/${department}/${section}/students`;
 
-      const response = await axios.post(apiUrl, data, {
+      const response = await axios.post(apiUrl, formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
-      setResponseMessage(response.data.message);
-    } catch (error) {
-      setResponseMessage(error.response?.data?.message || "Failed to add student");
+      setResponseMessage(response.data.message || "Students added successfully!");
+    } catch (err) {
+      setResponseMessage(err.response?.data?.message || "Failed to add students.");
     }
   };
 
   return (
     <div className="form-container">
-      <h2 className="form-title">Add Student</h2>
+      <h2 className="form-title">Bulk Add Students</h2>
       <form onSubmit={handleSubmit} className="student-form">
         <div className="form-group">
           <label>Year:</label>
-          <select name="year" value={formData.year} onChange={handleChange}>
+          <select value={year} onChange={(e) => setYear(e.target.value)}>
             <option value="B.Tech I">B.Tech I</option>
             <option value="B.Tech II">B.Tech II</option>
             <option value="B.Tech III">B.Tech III</option>
@@ -72,7 +69,7 @@ const AddStudent = () => {
         </div>
         <div className="form-group">
           <label>Department:</label>
-          <select name="department" value={formData.department} onChange={handleChange}>
+          <select value={department} onChange={(e) => setDepartment(e.target.value)}>
             <option value="CSD">CSD</option>
             <option value="CSE">CSE</option>
             <option value="EEE">EEE</option>
@@ -85,45 +82,17 @@ const AddStudent = () => {
         </div>
         <div className="form-group">
           <label>Section:</label>
-          <select name="section" value={formData.section} onChange={handleChange}>
+          <select value={section} onChange={(e) => setSection(e.target.value)}>
             <option value="A">A</option>
             <option value="B">B</option>
             <option value="C">C</option>
           </select>
         </div>
         <div className="form-group">
-          <label>Roll Number:</label>
-          <input type="text" name="rollNumber" value={formData.rollNumber} onChange={handleChange} required />
+          <label>Upload Excel File:</label>
+          <input type="file" accept=".xlsx, .xls" onChange={handleExcelUpload} required />
         </div>
-        <div className="form-group">
-          <label>Name:</label>
-          <input type="text" name="name" value={formData.name} onChange={handleChange} required />
-        </div>
-        <div className="form-group">
-          <label>Father Name:</label>
-          <input type="text" name="fatherName" value={formData.fatherName} onChange={handleChange} required />
-        </div>
-        <div className="form-group">
-          <label>Mobile Number:</label>
-          <input type="tel" name="mobileNumber" value={formData.mobileNumber} onChange={handleChange} required />
-        </div>
-        <div className="form-group">
-          <label>Father's Mobile Number:</label>
-          <input type="tel" name="fatherMobileNumber" value={formData.fatherMobileNumber} onChange={handleChange} required />
-        </div>
-        <div className="form-group">
-          <label>Password:</label>
-          <input type="password" name="password" value={formData.password} onChange={handleChange} required />
-        </div>
-        <div className="form-group">
-          <label>Role:</label>
-          <input type="text" name="role" value={formData.role} onChange={handleChange} required />
-        </div>
-        <div className="form-group">
-          <label>Profile Image:</label>
-          <input type="file" accept="image/*" onChange={handleImageChange} />
-        </div>
-        <button type="submit" className="submit-button">Add Student</button>
+        <button type="submit" className="submit-button">Upload Students</button>
       </form>
       {responseMessage && <p className="response-message">{responseMessage}</p>}
     </div>
