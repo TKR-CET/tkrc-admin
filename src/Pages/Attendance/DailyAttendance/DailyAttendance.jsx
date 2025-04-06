@@ -126,15 +126,14 @@ const AttendanceSummary = () => {
       <div className="attendance-table-container">
         <table className="attendance-table">
           <thead>
-            <tr>
-              <th>Timing - Fetched Subject</th>
-              <th>Faculty Name</th> {/* New Faculty Column */}
-              <th>Attendance Subject</th>
-              <th>Present</th>
-              <th>Absent</th>
-              <th>Total</th>
-            </tr>
-          </thead>
+  <tr>
+    <th>Timing - Subject - Faculty</th>
+    <th>Attendance Subject</th>
+    <th>Present</th>
+    <th>Absent</th>
+    <th>Total</th>
+  </tr>
+</thead>
           <tbody>
             {periodTimings.map((timing, index) => {
               const subjectData = subjects[index] || {};
