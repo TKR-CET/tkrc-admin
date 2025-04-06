@@ -127,7 +127,7 @@ const AttendanceSummary = () => {
         <table className="attendance-table">
           <thead>
   <tr>
-    <th>"Session Details</th>
+    <th>Session Details</th>
     <th>Attendance Status</th>
     <th>Present</th>
     <th>Absent</th>
