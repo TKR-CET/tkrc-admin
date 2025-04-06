@@ -147,28 +147,28 @@ const AttendanceSummary = () => {
               const totalStrength = presentCount !== "Not Taken" && absentCount !== "Not Taken" ? presentCount + absentCount : "Not Taken";
 
               return (
-                <tr key={index}>
-                  <td>{`${timing} - ${subjectData.subject || "Not Available"}`}</td>
+              <tr key={index}>
+  <td>
+    {`${timing} - ${subjectData.subject || "Not Available"}`}
+    <br />
+    <span style={{ fontSize: "0.9em", fontWeight: 500 }}>
+      {subjectData.facultyName || "Not Available"}
+    </span>
+    <br />
+    <span style={{ fontSize: "0.85em", color: "#555" }}>
+      ({subjectData.phoneNumber || "Not Available"})
+    </span>
+  </td>
 
-                  <td>
-  {subjectData.facultyName || "Not Available"}
-  <br />
-  <span style={{ fontSize: "0.85em", color: "#555" }}>
-    ({subjectData.phoneNumber || "Not Available"})
-  </span>
-</td>
-
-
-                  
-                  <td className={periodKey ? "" : "not-taken"}>{attendanceSubject}</td>
-                  <td className={periodKey ? "clickable" : "not-taken"} onClick={periodKey ? () => handleShowPopup(periodData) : null}>
-                    {presentCount}
-                  </td>
-                  <td className={periodKey ? "clickable" : "not-taken"} onClick={periodKey ? () => handleShowPopup(periodData) : null}>
-                    {absentCount}
-                  </td>
-                  <td className="total-strength">{totalStrength}</td>
-                </tr>
+  <td className={periodKey ? "" : "not-taken"}>{attendanceSubject}</td>
+  <td className={periodKey ? "clickable" : "not-taken"} onClick={periodKey ? () => handleShowPopup(periodData) : null}>
+    {presentCount}
+  </td>
+  <td className={periodKey ? "clickable" : "not-taken"} onClick={periodKey ? () => handleShowPopup(periodData) : null}>
+    {absentCount}
+  </td>
+  <td className="total-strength">{totalStrength}</td>
+</tr>
               );
             })}
           </tbody>
