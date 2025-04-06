@@ -149,7 +149,17 @@ const AttendanceSummary = () => {
               return (
                 <tr key={index}>
                   <td>{`${timing} - ${subjectData.subject || "Not Available"}`}</td>
-                  <td>{subjectData.facultyName || "Not Available"}</td> {/* Faculty Name Column */}
+
+                  <td>
+  {subjectData.facultyName || "Not Available"}
+  <br />
+  <span style={{ fontSize: "0.85em", color: "#555" }}>
+    ({subjectData.phoneNumber || "Not Available"})
+  </span>
+</td>
+
+
+                  
                   <td className={periodKey ? "" : "not-taken"}>{attendanceSubject}</td>
                   <td className={periodKey ? "clickable" : "not-taken"} onClick={periodKey ? () => handleShowPopup(periodData) : null}>
                     {presentCount}
