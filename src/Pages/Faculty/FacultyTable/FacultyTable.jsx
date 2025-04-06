@@ -45,36 +45,50 @@ const AddFacultyForm = () => {
   };
 
   const handleTimetableUpload = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+  const file = e.target.files[0];
+  if (!file) return;
 
-    const reader = new FileReader();
-    reader.onload = (evt) => {
-      const data = evt.target.result;
-      const workbook = XLSX.read(data, { type: "binary" });
-      const sheetName = workbook.SheetNames[0];
-      const sheet = workbook.Sheets[sheetName];
-      const json = XLSX.utils.sheet_to_json(sheet);
+  const reader = new FileReader();
+  reader.onload = (evt) => {
+    const data = evt.target.result;
+    const workbook = XLSX.read(data, { type: "binary" });
+    const sheetName = workbook.SheetNames[0];
+    const sheet = workbook.Sheets[sheetName];
+    const json = XLSX.utils.sheet_to_json(sheet);
 
-      // Example conversion to required format
-      const formatted = json.map((row) => ({
-        day: row.Day,
-        periods: [
-          row.P1 || "", row.P2 || "", row.P3 || "",
-          row.P4 || "", row.P5 || "", row.P6 || "",
-        ],
-      }));
+    const formatted = json.map((row) => {
+      const day = row.Day;
+      const periods = [];
 
-      setTimetable(formatted);
-      setTimetableError("");
-    };
+      for (let i = 1; i <= 6; i++) {
+        const raw = row[`P${i}`];
+        if (raw && typeof raw === "string") {
+          const [subject, year, department, section] = raw.split("-").map((val) => val?.trim());
+          if (subject && year && department && section) {
+            periods.push({
+              periodNumber: i,
+              subject,
+              year,
+              department,
+              section,
+            });
+          }
+        }
+      }
 
-    reader.onerror = () => {
-      setTimetableError("Failed to read the file.");
-    };
+      return { day, periods };
+    });
 
-    reader.readAsBinaryString(file);
+    setTimetable(formatted);
+    setTimetableError("");
   };
+
+  reader.onerror = () => {
+    setTimetableError("Failed to read the file.");
+  };
+
+  reader.readAsBinaryString(file);
+};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
