@@ -159,7 +159,15 @@ const AttendanceSummary = () => {
     </span>
   </td>
 
-  <td className={periodKey ? "" : "not-taken"}>{attendanceSubject}</td>
+  <td className={periodKey ? "" : "not-taken"}>
+  <div style={{ lineHeight: "1.4" }}>
+    <strong>{periodData.subject || "Not Taken"}</strong><br />
+    <span>{periodData.facultyName || "Not Available"}</span><br />
+    <span style={{ fontSize: "0.85em", color: "#555" }}>
+      ({periodData.phoneNumber || "Not Available"})
+    </span>
+  </div>
+</td>
   <td className={periodKey ? "clickable" : "not-taken"} onClick={periodKey ? () => handleShowPopup(periodData) : null}>
     {presentCount}
   </td>
