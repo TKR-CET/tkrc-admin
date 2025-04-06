@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import * as XLSX from "xlsx";
-import "./AddFacultyForm.css";
+import "./FacultyTable.css";
 
 const AddFacultyForm = () => {
   const [formData, setFormData] = useState({
