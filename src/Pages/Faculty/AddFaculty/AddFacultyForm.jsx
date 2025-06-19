@@ -65,7 +65,7 @@ const AddFacultyForm = () => {
       if (image) data.append("image", image);
 
       const response = await axios.post(
-        "https://tkrcet-backend-g3zu.onrender.com/faculty/addfaculty",
+        "https://tkrc-backend.vercel.app/faculty/addfaculty",
         data,
         { headers: { "Content-Type": "multipart/form-data" } }
       );
