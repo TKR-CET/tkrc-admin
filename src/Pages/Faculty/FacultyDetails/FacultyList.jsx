@@ -26,7 +26,7 @@ const FacultyList = () => {
     if (facultyId) {
       try {
         const response = await axios.get(
-          `https://tkrcet-backend-g3zu.onrender.com/faculty/facultyprofile/${facultyId}`
+          `https://tkrc-backend.vercel.app/faculty/facultyprofile/${facultyId}`
         );
         const dept = response.data.department.toUpperCase();
         setUserDepartment(dept);
@@ -43,7 +43,7 @@ const FacultyList = () => {
 
     try {
       const response = await axios.get(
-        `https://tkrcet-backend-g3zu.onrender.com/faculty/department/${department}`
+        `https://tkrc-backend.vercel.app/faculty/department/${department}`
       );
       const filteredData = response.data.map(({ timetable, ...rest }) => rest);
       setFaculties(filteredData);
@@ -59,7 +59,7 @@ const FacultyList = () => {
     if (!window.confirm("Are you sure you want to delete this faculty?")) return;
 
     try {
-      await axios.delete(`https://tkrcet-backend-g3zu.onrender.com/faculty/delete/${facultyId}`);
+      await axios.delete(`https://tkrc-backend.vercel.app/faculty/delete/${facultyId}`);
       setFaculties(faculties.filter((faculty) => faculty.facultyId !== facultyId));
       alert("Faculty deleted successfully!");
     } catch (error) {
