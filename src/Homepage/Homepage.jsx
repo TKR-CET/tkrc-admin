@@ -28,7 +28,7 @@ const Homepage = () => {
 
     const handleLogin = async () => {
         try {
-            const response = await axios.post("https://tkrcet-backend-g3zu.onrender.com/faculty/Adminlogin", { loginId, password });
+            const response = await axios.post("https://tkrcet-backend.vercel.app/faculty/Adminlogin", { loginId, password });
             
             // Store login ID in localStorage
             localStorage.setItem("facultyId", loginId);
