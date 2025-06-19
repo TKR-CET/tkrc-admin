@@ -16,7 +16,7 @@ const Mainpage = () => {
       if (!facultyId) return;
       try {
         const response = await axios.get(
-          `https://tkrcet-backend-g3zu.onrender.com/faculty/facultyprofile/${facultyId}`
+          `https://tkrc-backend.vercel.app/faculty/facultyprofile/${facultyId}`
         );
         setRole(response.data.role);
       } catch (error) {
