@@ -40,7 +40,7 @@ const AttendanceSummary = () => {
     if (facultyId) {
       try {
         const response = await axios.get(
-          `https://tkrcet-backend-g3zu.onrender.com/faculty/facultyprofile/${facultyId}`
+          `https://tkrcet-backend.vercel.app/faculty/facultyprofile/${facultyId}`
         );
         const department = response.data.department.toUpperCase();
         setUserDepartment(department);
@@ -54,7 +54,7 @@ const AttendanceSummary = () => {
   const fetchSubjectsForDay = async () => {
     try {
       const response = await axios.get(
-        `https://tkrcet-backend-g3zu.onrender.com/Section/subjects-day/${year}/${department}/${section}/${date}`
+        `https://tkrcet-backend.vercel.app/Section/subjects-day/${year}/${department}/${section}/${date}`
       );
       setSubjects(response.data.periods || []);
     } catch (error) {
@@ -66,7 +66,7 @@ const AttendanceSummary = () => {
   const fetchAttendance = async () => {
     try {
       const response = await axios.get(
-        `https://tkrcet-backend-g3zu.onrender.com/Attendance/section-summary-all`,
+        `https://tkrcet-backend.vercel.app/Attendance/section-summary-all`,
         { params: { year, department, section, date } }
       );
       setAttendanceData(response.data.attendance || {});
