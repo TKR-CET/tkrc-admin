@@ -26,7 +26,7 @@ const FacultyTable = () => {
         if (facultyId) {
             try {
                 const response = await axios.get(
-                    `https://tkrcet-backend-g3zu.onrender.com/faculty/facultyprofile/${facultyId}`
+                    `https://tkrc-backend.vercel.app/faculty/facultyprofile/${facultyId}`
                 );
                 const department = response.data.department.toUpperCase();
                 setUserDepartment(department);
@@ -40,7 +40,7 @@ const FacultyTable = () => {
     const fetchFacultyByDepartment = async (dept) => {
         try {
             const response = await axios.get(
-                `https://tkrcet-backend-g3zu.onrender.com/faculty/department/${dept}`
+                `https://tkrc-backend.vercel.app/faculty/department/${dept}`
             );
             setFacultyList(response.data || []);
             setFacultyId(""); // Reset faculty selection
@@ -63,13 +63,13 @@ const FacultyTable = () => {
         try {
             // Fetch Faculty Profile
             const facultyResponse = await axios.get(
-                `https://tkrcet-backend-g3zu.onrender.com/faculty/facultyId/${facultyId}`
+                `https://tkrc-backend.vercel.app/faculty/facultyId/${facultyId}`
             );
             setFacultyDetails(facultyResponse.data);
 
             // Fetch Faculty Timetable
             const timetableResponse = await axios.get(
-                `https://tkrcet-backend-g3zu.onrender.com/faculty/facultyId/${facultyId}/timetable`
+                `https://tkrc-backend.vercel.app/faculty/facultyId/${facultyId}/timetable`
             );
 
             if (timetableResponse.data?.timetable?.length > 0) {
