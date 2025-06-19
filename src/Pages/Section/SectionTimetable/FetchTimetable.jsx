@@ -30,7 +30,7 @@ const FetchTimetable = () => {
       if (loginId) {
         try {
           const response = await axios.get(
-            `https://tkrcet-backend-g3zu.onrender.com/faculty/facultyprofile/${loginId}`
+            `https://tkrc-backend.vercel.app/faculty/facultyprofile/${loginId}`
           );
           const department = response.data.department.toUpperCase(); // Normalize to uppercase
           setUserDepartment(department);
