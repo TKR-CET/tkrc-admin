@@ -50,7 +50,7 @@ const PermissionsList = () => {
     if (loginId) {
       try {
         const response = await fetch(
-          `https://tkrcet-backend-g3zu.onrender.com/faculty/facultyprofile/${loginId}`
+          `https://tkrc-backend.vercel.app/faculty/facultyprofile/${loginId}`
         );
         const data = await response.json();
         const department = data.department.toUpperCase(); 
@@ -65,7 +65,7 @@ const PermissionsList = () => {
   const fetchPermissions = async (department) => {
   try {
     const response = await fetch(
-      "https://tkrcet-backend-g3zu.onrender.com/Attendance/edit-permissions"
+      "https://tkrc-backend.vercel.app/Attendance/edit-permissions"
     );
     const data = await response.json();
     if (data.success) {
@@ -110,7 +110,7 @@ useEffect(() => {
 
     try {
       const response = await fetch(
-        `https://tkrcet-backend-g3zu.onrender.com/Attendance/permissions/${id}`,
+        `https://tkrc-backend.vercel.app/Attendance/permissions/${id}`,
         {
           method: "DELETE",
         }
@@ -131,7 +131,7 @@ useEffect(() => {
 
     try {
       const response = await fetch(
-        `https://tkrcet-backend-g3zu.onrender.com/Attendance/permissions/${id}`,
+        `https://tkrc-backend.vercel.app/Attendance/permissions/${id}`,
         {
           method: "DELETE",
         }
