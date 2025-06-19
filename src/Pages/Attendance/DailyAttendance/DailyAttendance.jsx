@@ -40,7 +40,7 @@ const AttendanceSummary = () => {
     if (facultyId) {
       try {
         const response = await axios.get(
-          `https://tkrcet-backend.vercel.app/faculty/facultyprofile/${facultyId}`
+          `https://tkrc-backend.vercel.app/faculty/facultyprofile/${facultyId}`
         );
         const department = response.data.department.toUpperCase();
         setUserDepartment(department);
