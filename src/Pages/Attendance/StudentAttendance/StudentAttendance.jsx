@@ -18,7 +18,7 @@ const StudentAttendance = () => {
     if (facultyId) {
       try {
         const response = await fetch(
-          `https://tkrcet-backend.vercel.app/faculty/facultyprofile/${facultyId}`
+          `https://tkrc-backend.vercel.app/faculty/facultyprofile/${facultyId}`
         );
         const data = await response.json();
         setUserDepartment(data.department.toUpperCase()); // Normalize to uppercase
@@ -61,7 +61,7 @@ const StudentAttendance = () => {
 
       // Fetch Attendance Data
       const attendanceRes = await fetch(
-        `https://tkrcet-backend.vercel.app/Attendance/student-record?rollNumber=${rollNo}`
+        `https://tkrc-backend.vercel.app/Attendance/student-record?rollNumber=${rollNo}`
       );
       const attendanceData = await attendanceRes.json();
 
