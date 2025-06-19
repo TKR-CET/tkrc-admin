@@ -24,7 +24,7 @@ const GrantPermission = () => {
   useEffect(() => {
     if (facultyDepartment) {
       axios
-        .get(`https://tkrcet-backend-g3zu.onrender.com/faculty/department/${facultyDepartment}`)
+        .get(`https://tkrc-backend.vercel.app/faculty/department/${facultyDepartment}`)
         .then((response) => {
           setFacultyList(response.data);
           setSelectedFaculty("");
@@ -70,7 +70,7 @@ const GrantPermission = () => {
       console.log("Sending Request:", requestData);
 
       const response = await axios.post(
-        "https://tkrcet-backend-g3zu.onrender.com/Attendance/grantEditPermission",
+        "https://tkrc-backend.vercel.app/Attendance/grantEditPermission",
         requestData,
         { headers: { "Content-Type": "application/json" } }
       );
@@ -82,7 +82,7 @@ const GrantPermission = () => {
       setTimeout(async () => {
         try {
           const checkResponse = await axios.get(
-            `https://tkrcet-backend-g3zu.onrender.com/Attendance/checkEditPermission?facultyId=${selectedFaculty}&year=${encodeURIComponent(editYear)}&department=${encodeURIComponent(editDepartment)}&section=${encodeURIComponent(editSection)}&date=${startDate}`
+            `https://tkrc-backend.vercel.app/Attendance/checkEditPermission?facultyId=${selectedFaculty}&year=${encodeURIComponent(editYear)}&department=${encodeURIComponent(editDepartment)}&section=${encodeURIComponent(editSection)}&date=${startDate}`
           );
           console.log("Permission Check Response:", checkResponse.data);
           alert(`Permission Check Response:\n${JSON.stringify(checkResponse.data, null, 2)}`);
