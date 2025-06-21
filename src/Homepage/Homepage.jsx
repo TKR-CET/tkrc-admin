@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import './Homepage.css';
-import VideoSection from "../VideoSection/VideoSection.jsx";
+
 
 const Homepage = () => {
     const imagesLoader = [
@@ -49,7 +49,10 @@ const Homepage = () => {
             </header>
 
             {/* Image Carousel */}
-            <VideoSection />
+            {/* Campus Image Section */}
+<div className="campus-image-container">
+  <img src="/images/campus.webp" alt="Campus View" className="campus-image" />
+</div>
 
             {/* About Section */}
             <section className="about-section">
