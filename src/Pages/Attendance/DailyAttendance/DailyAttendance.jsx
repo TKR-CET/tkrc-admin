@@ -54,7 +54,7 @@ const AttendanceSummary = () => {
   const fetchSubjectsForDay = async () => {
     try {
       const response = await axios.get(
-        `https://tkrcet-backend.vercel.app/Section/subjects-day/${year}/${department}/${section}/${date}`
+        `https://tkrc-backend.vercel.app/Section/subjects-day/${year}/${department}/${section}/${date}`
       );
       setSubjects(response.data.periods || []);
     } catch (error) {
@@ -66,7 +66,7 @@ const AttendanceSummary = () => {
   const fetchAttendance = async () => {
     try {
       const response = await axios.get(
-        `https://tkrcet-backend.vercel.app/Attendance/section-summary-all`,
+        `https://tkrc-backend.vercel.app/Attendance/section-summary-all`,
         { params: { year, department, section, date } }
       );
       setAttendanceData(response.data.attendance || {});
