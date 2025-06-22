@@ -14,8 +14,8 @@ const Homepage = () => {
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     
     // State for login inputs and response messages
-    const [loginId, setLoginId] = useState("");
-    const [password, setPassword] = useState("");
+    const [loginId, setLoginId] = useState("RA100");
+    const [password, setPassword] = useState("RA100");
     const [error, setError] = useState("");
     const navigate = useNavigate(); // For redirecting after login
 
