@@ -27,24 +27,28 @@ const AttendanceSummary = () => {
   const [selectedPeriod, setSelectedPeriod] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
 
+  const token = localStorage.getItem("token"); // Retrieve JWT token
+  const loginId = localStorage.getItem("loginId") || localStorage.getItem("facultyId"); // Use loginId for profile fetch
+
   useEffect(() => {
     fetchUserDepartment();
   }, []);
 
   useEffect(() => {
     fetchSubjectsForDay();
-  }, [year, department, section, date]); // Auto-fetch subjects on change
+  }, [year, department, section, date]); 
 
   const fetchUserDepartment = async () => {
-    const facultyId = localStorage.getItem("facultyId");
-    if (facultyId) {
+    if (loginId) {
       try {
         const response = await axios.get(
-          `https://tkrc-backend.vercel.app/faculty/facultyprofile/${facultyId}`
+          `https://tkrc-backend.vercel.app/admin/facultyprofile/${loginId}`, {
+            headers: { Authorization: `Bearer ${token}` } // Attach Token
+          }
         );
-        const department = response.data.department.toUpperCase();
-        setUserDepartment(department);
-        setDepartment(department !== "ALL" ? department : departments[0]);
+        const dept = response.data.department.toUpperCase();
+        setUserDepartment(dept);
+        setDepartment(dept !== "ALL" ? dept : departments[0]);
       } catch (error) {
         console.error("Error fetching user department:", error);
       }
@@ -54,7 +58,9 @@ const AttendanceSummary = () => {
   const fetchSubjectsForDay = async () => {
     try {
       const response = await axios.get(
-        `https://tkrc-backend.vercel.app/Section/subjects-day/${year}/${department}/${section}/${date}`
+        `https://tkrc-backend.vercel.app/Section/subjects-day/${year}/${department}/${section}/${date}`, {
+          headers: { Authorization: `Bearer ${token}` } // Attach Token
+        }
       );
       setSubjects(response.data.periods || []);
     } catch (error) {
@@ -67,7 +73,10 @@ const AttendanceSummary = () => {
     try {
       const response = await axios.get(
         `https://tkrc-backend.vercel.app/Attendance/section-summary-all`,
-        { params: { year, department, section, date } }
+        { 
+          params: { year, department, section, date },
+          headers: { Authorization: `Bearer ${token}` } // Attach Token
+        }
       );
       setAttendanceData(response.data.attendance || {});
     } catch (error) {
@@ -85,7 +94,6 @@ const AttendanceSummary = () => {
     <div className="attendance-container">
       <h2 className="attendance-title">Attendance Summary</h2>
 
-      {/* Input Fields in a Single Row */}
       <div className="attendance-inputs">
         <label>Year:</label>
         <select value={year} onChange={(e) => setYear(e.target.value)}>
@@ -122,18 +130,17 @@ const AttendanceSummary = () => {
         <button onClick={fetchAttendance}>Submit</button>
       </div>
 
-      {/* Attendance Table */}
       <div className="attendance-table-container">
         <table className="attendance-table">
           <thead>
-  <tr>
-    <th>Session Details</th>
-    <th>Attendance Status</th>
-    <th>Present</th>
-    <th>Absent</th>
-    <th>Total</th>
-  </tr>
-</thead>
+            <tr>
+              <th>Session Details</th>
+              <th>Attendance Status</th>
+              <th>Present</th>
+              <th>Absent</th>
+              <th>Total</th>
+            </tr>
+          </thead>
           <tbody>
             {periodTimings.map((timing, index) => {
               const subjectData = subjects[index] || {};
@@ -147,42 +154,41 @@ const AttendanceSummary = () => {
 
               return (
               <tr key={index}>
-  <td>
-    {`${timing} - ${subjectData.subject || "Not Available"}`}
-    <br />
-    <span style={{ fontSize: "0.9em", fontWeight: 500 }}>
-      {subjectData.facultyName || "Not Available"}
-    </span>
-    <br />
-    <span style={{ fontSize: "0.85em", color: "#555" }}>
-      ({subjectData.phoneNumber || "Not Available"})
-    </span>
-  </td>
+                <td>
+                  {`${timing} - ${subjectData.subject || "Not Available"}`}
+                  <br />
+                  <span style={{ fontSize: "0.9em", fontWeight: 500 }}>
+                    {subjectData.facultyName || "Not Available"}
+                  </span>
+                  <br />
+                  <span style={{ fontSize: "0.85em", color: "#555" }}>
+                    ({subjectData.phoneNumber || "Not Available"})
+                  </span>
+                </td>
 
-  <td className={periodKey ? "" : "not-taken"}>
-  <div style={{ lineHeight: "1.4" }}>
-    <strong>{periodData.subject || "Not Taken"}</strong><br />
-    <span>{periodData.facultyName || "Not Available"}</span><br />
-    <span style={{ fontSize: "0.85em", color: "#555" }}>
-      ({periodData.phoneNumber || "Not Available"})
-    </span>
-  </div>
-</td>
-  <td className={periodKey ? "clickable" : "not-taken"} onClick={periodKey ? () => handleShowPopup(periodData) : null}>
-    {presentCount}
-  </td>
-  <td className={periodKey ? "clickable" : "not-taken"} onClick={periodKey ? () => handleShowPopup(periodData) : null}>
-    {absentCount}
-  </td>
-  <td className="total-strength">{totalStrength}</td>
-</tr>
+                <td className={periodKey ? "" : "not-taken"}>
+                <div style={{ lineHeight: "1.4" }}>
+                  <strong>{periodData.subject || "Not Taken"}</strong><br />
+                  <span>{periodData.facultyName || "Not Available"}</span><br />
+                  <span style={{ fontSize: "0.85em", color: "#555" }}>
+                    ({periodData.phoneNumber || "Not Available"})
+                  </span>
+                </div>
+              </td>
+                <td className={periodKey ? "clickable" : "not-taken"} onClick={periodKey ? () => handleShowPopup(periodData) : null}>
+                  {presentCount}
+                </td>
+                <td className={periodKey ? "clickable" : "not-taken"} onClick={periodKey ? () => handleShowPopup(periodData) : null}>
+                  {absentCount}
+                </td>
+                <td className="total-strength">{totalStrength}</td>
+              </tr>
               );
             })}
           </tbody>
         </table>
       </div>
 
-      {/* Attendance Details Popup */}
       {showPopup && selectedPeriod && (
         <div className="popup-overlay" onClick={() => setShowPopup(false)}>
           <div className="popup-box" onClick={(e) => e.stopPropagation()}>
