@@ -35,7 +35,9 @@ const StudentAttendance = () => {
   };
 
   const handleFetch = async () => {
-    if (!rollNo) {
+    const cleanRollNo = rollNo.trim(); // Remove accidental spaces
+    
+    if (!cleanRollNo) {
       setErrorMsg("Please enter a Roll Number.");
       return;
     }
@@ -46,14 +48,14 @@ const StudentAttendance = () => {
     setAttendanceInfo(null);
 
     try {
-      // Fetch Student Details
-      const studentRes = await fetch(`https://tkrcet-backend-g3zu.onrender.com/Section/${rollNo}`, {
+      // 1. Fetch Student Details
+      const studentRes = await fetch(`https://tkrcet-backend-g3zu.onrender.com/Section/${encodeURIComponent(cleanRollNo)}`, {
         headers: { Authorization: `Bearer ${token}` } // Attach Token
       });
       const studentData = await studentRes.json();
 
-      if (!studentData || !studentData.student) {
-        setErrorMsg("Failed to retrieve student data.");
+      if (!studentRes.ok || !studentData || !studentData.student) {
+        setErrorMsg(studentData.message || "Failed to retrieve student profile.");
         setIsLoading(false);
         return;
       }
@@ -66,29 +68,50 @@ const StudentAttendance = () => {
       }
 
       setStudentInfo(studentData.student);
+      
+      // Grab the EXACT roll number from the database to prevent case-sensitivity issues
+      const exactDbRollNumber = studentData.student.rollNumber;
 
-      // Fetch Attendance Data
+      // 2. Fetch Attendance Data
       const attendanceRes = await fetch(
-        `https://tkrc-backend.vercel.app/Attendance/student-record?rollNumber=${rollNo}`, {
+        `https://tkrc-backend.vercel.app/Attendance/student-record?rollNumber=${encodeURIComponent(exactDbRollNumber)}`, {
           headers: { Authorization: `Bearer ${token}` } // Attach Token
         }
       );
       const attendanceData = await attendanceRes.json();
 
+      // If the backend returns an error (like 404 Not Found), show the REAL error message
+      if (!attendanceRes.ok) {
+        setErrorMsg(attendanceData.message || "Failed to retrieve attendance data.");
+        setIsLoading(false);
+        return;
+      }
+
+      // Ensure the structure is correct
       if (!attendanceData || !attendanceData.subjectSummary || !attendanceData.dailySummary) {
-        setErrorMsg("Failed to retrieve attendance data.");
+        setErrorMsg("Attendance data format is invalid or missing.");
         setIsLoading(false);
         return;
       }
 
       console.log("Attendance Data:", attendanceData); 
-
       setAttendanceInfo(attendanceData);
+      
     } catch (error) {
-      setErrorMsg("Error retrieving student or attendance data.");
+      console.error("Fetch Error:", error);
+      setErrorMsg("A network error occurred while retrieving data.");
     } finally {
       setIsLoading(false);
     }
+  };
+
+  // Safe percentage calculation to prevent NaN% when dividing by zero
+  const calculateTotalPercentage = () => {
+    if (!attendanceInfo || !attendanceInfo.subjectSummary) return "0.00";
+    const totalConducted = attendanceInfo.subjectSummary.reduce((sum, sub) => sum + sub.classesConducted, 0);
+    const totalAttended = attendanceInfo.subjectSummary.reduce((sum, sub) => sum + sub.classesAttended, 0);
+    
+    return totalConducted > 0 ? ((totalAttended / totalConducted) * 100).toFixed(2) : "0.00";
   };
 
   return (
@@ -101,14 +124,15 @@ const StudentAttendance = () => {
           value={rollNo}
           onChange={(e) => setRollNo(e.target.value)}
           className="input-box"
+          onKeyDown={(e) => e.key === 'Enter' && handleFetch()} // Allows pressing Enter to search
         />
         <button onClick={handleFetch} className="fetch-btn">Search</button>
       </div>
 
       {isLoading && <h3 className="loading-msg">Loading...</h3>}
-      {errorMsg && <h3 className="error-msg">{errorMsg}</h3>}
+      {errorMsg && <h3 className="error-msg" style={{color: "red"}}>{errorMsg}</h3>}
 
-      {studentInfo && (
+      {studentInfo && !errorMsg && (
         <div className="table-wrapper">
           <h3>Student Details</h3>
           <table className="info-table">
@@ -137,7 +161,7 @@ const StudentAttendance = () => {
         </div>
       )}
 
-      {attendanceInfo && (
+      {attendanceInfo && !errorMsg && (
         <>
           <div className="table-wrapper">
             <h3>Attendance Overview</h3>
@@ -164,13 +188,7 @@ const StudentAttendance = () => {
                   <td><b>{attendanceInfo.subjectSummary.reduce((sum, sub) => sum + sub.classesConducted, 0)}</b></td>
                   <td><b>{attendanceInfo.subjectSummary.reduce((sum, sub) => sum + sub.classesAttended, 0)}</b></td>
                   <td id="overall">
-                    <b>
-                      {(
-                        (attendanceInfo.subjectSummary.reduce((sum, sub) => sum + sub.classesAttended, 0) /
-                          attendanceInfo.subjectSummary.reduce((sum, sub) => sum + sub.classesConducted, 0)) *
-                        100
-                      ).toFixed(2)}%
-                    </b>
+                    <b>{calculateTotalPercentage()}%</b>
                   </td>
                 </tr>
               </tbody>
