@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./StudentAttendance.css"; // Updated CSS filename
+import "./StudentAttendance.css"; 
 
 const StudentAttendance = () => {
   const [rollNo, setRollNo] = useState("");
@@ -9,19 +9,25 @@ const StudentAttendance = () => {
   const [errorMsg, setErrorMsg] = useState("");
   const [userDepartment, setUserDepartment] = useState("");
 
+  const token = localStorage.getItem("token"); // Retrieve JWT
+  const loginId = localStorage.getItem("loginId") || localStorage.getItem("facultyId");
+
   useEffect(() => {
     fetchUserDepartment();
   }, []);
 
   const fetchUserDepartment = async () => {
-    const facultyId = localStorage.getItem("facultyId");
-    if (facultyId) {
+    if (loginId) {
       try {
         const response = await fetch(
-          `https://tkrc-backend.vercel.app/faculty/facultyprofile/${facultyId}`
+          `https://tkrc-backend.vercel.app/admin/facultyprofile/${loginId}`, {
+            headers: { Authorization: `Bearer ${token}` } // Attach Token
+          }
         );
         const data = await response.json();
-        setUserDepartment(data.department.toUpperCase()); // Normalize to uppercase
+        if (data.department) {
+          setUserDepartment(data.department.toUpperCase()); 
+        }
       } catch (error) {
         console.error("Error fetching user department:", error);
       }
@@ -41,7 +47,9 @@ const StudentAttendance = () => {
 
     try {
       // Fetch Student Details
-      const studentRes = await fetch(`https://tkrcet-backend-g3zu.onrender.com/Section/${rollNo}`);
+      const studentRes = await fetch(`https://tkrcet-backend-g3zu.onrender.com/Section/${rollNo}`, {
+        headers: { Authorization: `Bearer ${token}` } // Attach Token
+      });
       const studentData = await studentRes.json();
 
       if (!studentData || !studentData.student) {
@@ -61,7 +69,9 @@ const StudentAttendance = () => {
 
       // Fetch Attendance Data
       const attendanceRes = await fetch(
-        `https://tkrc-backend.vercel.app/Attendance/student-record?rollNumber=${rollNo}`
+        `https://tkrc-backend.vercel.app/Attendance/student-record?rollNumber=${rollNo}`, {
+          headers: { Authorization: `Bearer ${token}` } // Attach Token
+        }
       );
       const attendanceData = await attendanceRes.json();
 
@@ -71,7 +81,7 @@ const StudentAttendance = () => {
         return;
       }
 
-      console.log("Attendance Data:", attendanceData); // Debugging log
+      console.log("Attendance Data:", attendanceData); 
 
       setAttendanceInfo(attendanceData);
     } catch (error) {
@@ -167,7 +177,6 @@ const StudentAttendance = () => {
             </table>
           </div>
 
-          {/* Daily Attendance Summary */}
           <div className="daily-attendance">
             <h2>Daily Attendance</h2>
             <table className="t2">
