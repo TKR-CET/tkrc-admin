@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./AttendanceSummary.css"; // Import CSS file for styling
+import "./AttendanceSummary.css"; 
 
 const AttendanceSummary = () => {
   const [year, setYear] = useState("B.Tech I");
@@ -8,21 +8,27 @@ const AttendanceSummary = () => {
   const [attendanceData, setAttendanceData] = useState([]);
   const [userDepartment, setUserDepartment] = useState("");
 
+  const token = localStorage.getItem("token"); // Retrieve JWT
+  const loginId = localStorage.getItem("loginId") || localStorage.getItem("facultyId");
+
   useEffect(() => {
     fetchUserDepartment();
   }, []);
 
   const fetchUserDepartment = async () => {
-    const facultyId = localStorage.getItem("facultyId");
-    if (facultyId) {
+    if (loginId) {
       try {
         const response = await fetch(
-          `https://tkrc-backend.vercel.app/faculty/facultyprofile/${facultyId}`
+          `https://tkrc-backend.vercel.app/admin/facultyprofile/${loginId}`, {
+            headers: { Authorization: `Bearer ${token}` } // Attach Token
+          }
         );
         const data = await response.json();
-        const department = data.department.toUpperCase(); // Normalize to uppercase
-        setUserDepartment(department);
-        setDepartment(department !== "ALL" ? department : "CSD"); // Default to first available
+        if (data.department) {
+          const dept = data.department.toUpperCase(); 
+          setUserDepartment(dept);
+          setDepartment(dept !== "ALL" ? dept : "CSD"); 
+        }
       } catch (error) {
         console.error("Error fetching user department:", error);
       }
@@ -32,7 +38,9 @@ const AttendanceSummary = () => {
   const fetchAttendance = async () => {
     const url = `https://tkrc-backend.vercel.app/Attendance/section-record?year=${year}&department=${department}&section=${section}`;
     try {
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        headers: { Authorization: `Bearer ${token}` } // Attach Token
+      });
       const data = await response.json();
       setAttendanceData(data.attendanceSummary || []);
     } catch (error) {
@@ -44,7 +52,6 @@ const AttendanceSummary = () => {
     <div className="attendance-container">
       <h2 className="attendance-title">Section Attendance Summary</h2>
 
-      {/* Input Fields */}
       <div className="form-group">
         <label>Year:</label>
         <select value={year} onChange={(e) => setYear(e.target.value)}>
@@ -87,7 +94,6 @@ const AttendanceSummary = () => {
         </button>
       </div>
 
-      {/* Attendance Table */}
       {attendanceData.length > 0 && (
         <div className="attendance-table-container">
           <table className="attendance-table">
