@@ -48,8 +48,8 @@ const StudentAttendance = () => {
     setAttendanceInfo(null);
 
     try {
-      // 1. Fetch Student Details
-      const studentRes = await fetch(`https://tkrcet-backend-g3zu.onrender.com/Section/${encodeURIComponent(cleanRollNo)}`, {
+      // 1. Fetch Student Details (UPDATED TO VERCEL URL)
+      const studentRes = await fetch(`https://tkrc-backend.vercel.app/Section/${encodeURIComponent(cleanRollNo)}`, {
         headers: { Authorization: `Bearer ${token}` } // Attach Token
       });
       const studentData = await studentRes.json();
@@ -80,7 +80,6 @@ const StudentAttendance = () => {
       );
       const attendanceData = await attendanceRes.json();
 
-      // If the backend returns an error (like 404 Not Found), show the REAL error message
       if (!attendanceRes.ok) {
         setErrorMsg(attendanceData.message || "Failed to retrieve attendance data.");
         setIsLoading(false);
@@ -124,7 +123,7 @@ const StudentAttendance = () => {
           value={rollNo}
           onChange={(e) => setRollNo(e.target.value)}
           className="input-box"
-          onKeyDown={(e) => e.key === 'Enter' && handleFetch()} // Allows pressing Enter to search
+          onKeyDown={(e) => e.key === 'Enter' && handleFetch()} 
         />
         <button onClick={handleFetch} className="fetch-btn">Search</button>
       </div>
