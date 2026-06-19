@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import "./AddFacultyForm.css"; // Import professional styles
+import "./AddFacultyForm.css"; 
 
 const AddFacultyForm = () => {
   const [formData, setFormData] = useState({
@@ -14,7 +14,7 @@ const AddFacultyForm = () => {
     experience: "",
     areaOfInterest: "",
     jntuId: "",
-    phoneNumber: "", // New field added
+    phoneNumber: "", 
     password: "",
     timetable: "",
   });
@@ -24,10 +24,11 @@ const AddFacultyForm = () => {
   const [timetableError, setTimetableError] = useState("");
   const [phoneError, setPhoneError] = useState("");
 
+  const token = localStorage.getItem("token"); // Retrieve JWT token
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    // Validate phone number format (Optional, assumes a 10-digit number)
     if (name === "phoneNumber") {
       const phoneRegex = /^[0-9]{10}$/;
       if (!phoneRegex.test(value)) {
@@ -47,7 +48,7 @@ const AddFacultyForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (phoneError) return; // Prevent submission if phone number is invalid
+    if (phoneError) return; 
 
     try {
       const parsedTimetable = JSON.parse(formData.timetable);
@@ -67,7 +68,12 @@ const AddFacultyForm = () => {
       const response = await axios.post(
         "https://tkrc-backend.vercel.app/faculty/addfaculty",
         data,
-        { headers: { "Content-Type": "multipart/form-data" } }
+        { 
+          headers: { 
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}` // Attach Token
+          } 
+        }
       );
 
       setResponseMessage(response.data.message);
@@ -95,7 +101,7 @@ const AddFacultyForm = () => {
           { label: "Experience (in years)", name: "experience", type: "text" },
           { label: "Area of Interest (comma-separated)", name: "areaOfInterest", type: "text" },
           { label: "JNTU ID", name: "jntuId", type: "text" },
-          { label: "Phone Number", name: "phoneNumber", type: "text" }, // New field
+          { label: "Phone Number", name: "phoneNumber", type: "text" }, 
           { label: "Password", name: "password", type: "password" },
         ].map(({ label, name, type }) => (
           <div className="input-group" key={name}>
