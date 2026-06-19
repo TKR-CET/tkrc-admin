@@ -21,10 +21,14 @@ const GrantPermission = () => {
   const years = ["B.Tech I", "B.Tech II", "B.Tech III", "B.Tech IV"];
   const departments = ["CSD", "CSE", "CSM", "EEE", "ECE", "CIVIL", "ME"];
 
+  const token = localStorage.getItem("token"); // Retrieve JWT token
+
   useEffect(() => {
     if (facultyDepartment) {
       axios
-        .get(`https://tkrc-backend.vercel.app/faculty/department/${facultyDepartment}`)
+        .get(`https://tkrc-backend.vercel.app/faculty/department/${facultyDepartment}`, {
+          headers: { Authorization: `Bearer ${token}` } // Attach Token
+        })
         .then((response) => {
           setFacultyList(response.data);
           setSelectedFaculty("");
@@ -34,7 +38,7 @@ const GrantPermission = () => {
       setFacultyList([]);
       setSelectedFaculty("");
     }
-  }, [facultyDepartment]);
+  }, [facultyDepartment, token]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -72,7 +76,12 @@ const GrantPermission = () => {
       const response = await axios.post(
         "https://tkrc-backend.vercel.app/Attendance/grantEditPermission",
         requestData,
-        { headers: { "Content-Type": "application/json" } }
+        { 
+          headers: { 
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}` // Attach Token
+          } 
+        }
       );
 
       console.log("Response:", response.data);
@@ -82,7 +91,10 @@ const GrantPermission = () => {
       setTimeout(async () => {
         try {
           const checkResponse = await axios.get(
-            `https://tkrc-backend.vercel.app/Attendance/checkEditPermission?facultyId=${selectedFaculty}&year=${encodeURIComponent(editYear)}&department=${encodeURIComponent(editDepartment)}&section=${encodeURIComponent(editSection)}&date=${startDate}`
+            `https://tkrc-backend.vercel.app/Attendance/checkEditPermission?facultyId=${selectedFaculty}&year=${encodeURIComponent(editYear)}&department=${encodeURIComponent(editDepartment)}&section=${encodeURIComponent(editSection)}&date=${startDate}`,
+            {
+              headers: { Authorization: `Bearer ${token}` } // Attach Token
+            }
           );
           console.log("Permission Check Response:", checkResponse.data);
           alert(`Permission Check Response:\n${JSON.stringify(checkResponse.data, null, 2)}`);
