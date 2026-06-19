@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./FetchStudents.css"; // Import CSS file
+import "./FetchStudents.css"; 
 
 const FetchStudents = () => {
   const [formData, setFormData] = useState({
@@ -13,22 +13,26 @@ const FetchStudents = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [deleteMessage, setDeleteMessage] = useState("");
-  const [userDepartment, setUserDepartment] = useState(""); // Stores user's department
-  const [userRole, setUserRole] = useState(""); // Stores user's role
+  const [userDepartment, setUserDepartment] = useState(""); 
+  const [userRole, setUserRole] = useState(""); 
+
+  const token = localStorage.getItem("token"); // Retrieve JWT token
+  const loginId = localStorage.getItem("loginId") || localStorage.getItem("facultyId");
 
   useEffect(() => {
     const fetchUserDetails = async () => {
-      const loginId = localStorage.getItem("facultyId");
       if (loginId) {
         try {
+          // Updated to the correct admin profile endpoint
           const response = await axios.get(
-            `https://tkrcet-backend-g3zu.onrender.com/faculty/facultyprofile/${loginId}`
+            `https://tkrc-backend.vercel.app/admin/facultyprofile/${loginId}`, {
+              headers: { Authorization: `Bearer ${token}` } // Attach Token
+            }
           );
           const { department, role } = response.data;
           setUserDepartment(department.toUpperCase());
-          setUserRole(role.toUpperCase()); // Normalize role to uppercase
+          setUserRole(role.toUpperCase()); 
 
-          // Restrict department selection if user doesn't have "ALL" access
           if (department.toUpperCase() !== "ALL") {
             setFormData((prevData) => ({
               ...prevData,
@@ -42,7 +46,7 @@ const FetchStudents = () => {
     };
 
     fetchUserDetails();
-  }, []);
+  }, [loginId, token]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -57,7 +61,9 @@ const FetchStudents = () => {
     const apiUrl = `https://tkrcet-backend-g3zu.onrender.com/Section/${formData.year}/${formData.department}/${formData.section}/students`;
 
     try {
-      const response = await axios.get(apiUrl);
+      const response = await axios.get(apiUrl, {
+        headers: { Authorization: `Bearer ${token}` } // Attach Token
+      });
       if (response.data.students) {
         setStudents(response.data.students);
       } else {
@@ -74,7 +80,9 @@ const FetchStudents = () => {
     if (!window.confirm(`Are you sure you want to delete student ${rollNumber}?`)) return;
 
     try {
-      await axios.delete(`https://tkrcet-backend-g3zu.onrender.com/Section/students/${rollNumber}`);
+      await axios.delete(`https://tkrcet-backend-g3zu.onrender.com/Section/students/${rollNumber}`, {
+        headers: { Authorization: `Bearer ${token}` } // Attach Token
+      });
       setStudents(students.filter((student) => student.rollNumber !== rollNumber));
       setDeleteMessage(`Student ${rollNumber} deleted successfully.`);
     } catch (err) {
@@ -85,8 +93,7 @@ const FetchStudents = () => {
   return (
     <div className="fetch-container">
       <h2 className="fetch-title">Student Details</h2>
-      
-      {/* Dropdowns for Year, Department, and Section */}
+
       <div className="form-group">
         <label>Year:</label>
         <select name="year" value={formData.year} onChange={handleChange}>
@@ -103,7 +110,7 @@ const FetchStudents = () => {
           name="department"
           value={formData.department}
           onChange={handleChange}
-          disabled={userDepartment !== "ALL"} // Disable if user has department restrictions
+          disabled={userDepartment !== "ALL"} 
         >
           {userDepartment === "ALL" ? (
             <>
@@ -133,12 +140,10 @@ const FetchStudents = () => {
 
       <button onClick={fetchStudents} className="fetch-button">Submit</button>
 
-      {/* Messages */}
       {loading && <p className="loading-message">Loading...</p>}
       {error && <p className="error-message">{error}</p>}
       {deleteMessage && <p className="success-message">{deleteMessage}</p>}
 
-      {/* Display Students */}
       {students.length > 0 && (
         <div className="student-list">
           <h3>Student List</h3>
@@ -173,7 +178,6 @@ const FetchStudents = () => {
                   <tr>
                     <td><strong>Father Mobile</strong></td>
                     <td>{student.fatherMobileNumber}</td>
-                    {/* Hide delete button if user is HOD */}
                     {userRole !== "HOD" && (
                       <td className="delete-cell">
                         <button onClick={() => deleteStudent(student.rollNumber)} className="delete-button">
