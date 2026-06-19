@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./FacultyList.css"; // Import CSS file
+import "./FacultyList.css"; 
 
 const FacultyList = () => {
   const departments = ["CSE", "CSD", "IT", "ECE", "EEE", "MECH", "CIVIL"];
@@ -10,6 +10,9 @@ const FacultyList = () => {
   const [faculties, setFaculties] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const token = localStorage.getItem("token"); // Retrieve JWT token
+  const loginId = localStorage.getItem("loginId") || localStorage.getItem("facultyId");
 
   useEffect(() => {
     fetchUserDepartment();
@@ -22,11 +25,12 @@ const FacultyList = () => {
   }, [department]);
 
   const fetchUserDepartment = async () => {
-    const facultyId = localStorage.getItem("facultyId");
-    if (facultyId) {
+    if (loginId) {
       try {
         const response = await axios.get(
-          `https://tkrc-backend.vercel.app/faculty/facultyprofile/${facultyId}`
+          `https://tkrc-backend.vercel.app/admin/facultyprofile/${loginId}`, {
+            headers: { Authorization: `Bearer ${token}` } // Attach Token
+          }
         );
         const dept = response.data.department.toUpperCase();
         setUserDepartment(dept);
@@ -43,7 +47,9 @@ const FacultyList = () => {
 
     try {
       const response = await axios.get(
-        `https://tkrc-backend.vercel.app/faculty/department/${department}`
+        `https://tkrc-backend.vercel.app/faculty/department/${department}`, {
+          headers: { Authorization: `Bearer ${token}` } // Attach Token
+        }
       );
       const filteredData = response.data.map(({ timetable, ...rest }) => rest);
       setFaculties(filteredData);
@@ -59,7 +65,9 @@ const FacultyList = () => {
     if (!window.confirm("Are you sure you want to delete this faculty?")) return;
 
     try {
-      await axios.delete(`https://tkrc-backend.vercel.app/faculty/delete/${facultyId}`);
+      await axios.delete(`https://tkrc-backend.vercel.app/faculty/delete/${facultyId}`, {
+        headers: { Authorization: `Bearer ${token}` } // Attach Token
+      });
       setFaculties(faculties.filter((faculty) => faculty.facultyId !== facultyId));
       alert("Faculty deleted successfully!");
     } catch (error) {
@@ -72,7 +80,6 @@ const FacultyList = () => {
     <div className="faculty-container">
       <h2 className="title">Faculty List by Department</h2>
 
-      {/* Department Selection */}
       <div className="department-select">
         <label htmlFor="department">Select Department:</label>
         <select
@@ -92,7 +99,6 @@ const FacultyList = () => {
         </select>
       </div>
 
-      {/* Display Results */}
       {loading ? (
         <p className="loading">Loading...</p>
       ) : error ? (
