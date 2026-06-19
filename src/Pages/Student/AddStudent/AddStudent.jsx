@@ -10,6 +10,8 @@ const AddStudent = () => {
   const [section, setSection] = useState("A");
   const [responseMessage, setResponseMessage] = useState("");
 
+  const token = localStorage.getItem("token"); // Retrieve JWT token
+
   const handleExcelUpload = (e) => {
     const file = e.target.files[0];
     const reader = new FileReader();
@@ -45,7 +47,10 @@ const AddStudent = () => {
       const apiUrl = `https://tkrcet-backend-g3zu.onrender.com/Section/${year}/${department}/${section}/students`;
 
       const response = await axios.post(apiUrl, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: { 
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}` // Attach Token
+        },
       });
 
       setResponseMessage(response.data.message || "Students added successfully!");
