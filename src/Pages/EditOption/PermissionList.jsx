@@ -7,55 +7,58 @@ const PermissionsList = () => {
   const [error, setError] = useState(null);
   const [userDepartment, setUserDepartment] = useState("");
 
+  const token = localStorage.getItem("token"); // Retrieve JWT token
+  const loginId = localStorage.getItem("loginId") || localStorage.getItem("facultyId");
+
   useEffect(() => {
     fetchUserDepartment();
   }, []);
 
+  // Consolidated countdown timer hook
   useEffect(() => {
     const interval = setInterval(() => {
       setPermissions((prevPermissions) =>
         prevPermissions.map((perm) => ({
           ...perm,
-          timeRemaining: calculateTimeRemaining(perm.endDate, perm.endTime),
+          timeRemaining: calculateTimeRemaining(perm.endTime),
         }))
       );
     }, 1000); // Update countdown every second
 
     return () => clearInterval(interval);
-  }, [permissions]);
+  }, []); // Run once on mount, updates state cleanly
 
-  
   const calculateTimeRemaining = (endTime) => {
-  if (!endTime) return "Expired";
+    if (!endTime) return "Expired";
 
-  const endDateTime = new Date(endTime).getTime(); // Use only endTime since it's a full timestamp
-  console.log("End Time:", endTime, "Parsed Date:", endDateTime); // Debugging
+    const endDateTime = new Date(endTime).getTime(); // Use only endTime since it's a full timestamp
+    const now = new Date().getTime();
+    const diff = endDateTime - now;
 
-  const now = new Date().getTime();
-  const diff = endDateTime - now;
+    if (isNaN(endDateTime) || diff <= 0) return "Expired";
 
-  if (isNaN(endDateTime) || diff <= 0) return "Expired";
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-  const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-  const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-  return `${days}d ${hours}h ${minutes}m ${seconds}s`;
-};
-  
+    return `${days}d ${hours}h ${minutes}m ${seconds}s`;
+  };
 
   const fetchUserDepartment = async () => {
-    const loginId = localStorage.getItem("facultyId");
     if (loginId) {
       try {
         const response = await fetch(
-          `https://tkrc-backend.vercel.app/faculty/facultyprofile/${loginId}`
+          `https://tkrc-backend.vercel.app/admin/facultyprofile/${loginId}`, {
+            headers: { Authorization: `Bearer ${token}` } // Attach Token
+          }
         );
         const data = await response.json();
-        const department = data.department.toUpperCase(); 
-        setUserDepartment(department);
-        fetchPermissions(department);
+        if (data && data.department) {
+          const department = data.department.toUpperCase(); 
+          setUserDepartment(department);
+          fetchPermissions(department);
+        }
       } catch (error) {
         console.error("Error fetching user department:", error);
       }
@@ -63,47 +66,32 @@ const PermissionsList = () => {
   };
 
   const fetchPermissions = async (department) => {
-  try {
-    const response = await fetch(
-      "https://tkrc-backend.vercel.app/Attendance/edit-permissions"
-    );
-    const data = await response.json();
-    if (data.success) {
-      const updatedPermissions = data.data.map((perm) => {
-        console.log("Raw Permission Data:", perm); // Debugging
-        return {
-          ...perm,
-          timeRemaining: calculateTimeRemaining(perm.endTime), // Only use `endTime`
-        };
-      });
-      setPermissions(
-        department === "ALL" ? updatedPermissions : updatedPermissions.filter((perm) => perm.department === department)
+    try {
+      const response = await fetch(
+        "https://tkrc-backend.vercel.app/Attendance/edit-permissions", {
+          headers: { Authorization: `Bearer ${token}` } // Attach Token
+        }
       );
-    } else {
-      setError("Failed to fetch data");
+      const data = await response.json();
+      if (data.success) {
+        const updatedPermissions = data.data.map((perm) => {
+          return {
+            ...perm,
+            timeRemaining: calculateTimeRemaining(perm.endTime), // Only use `endTime`
+          };
+        });
+        setPermissions(
+          department === "ALL" ? updatedPermissions : updatedPermissions.filter((perm) => perm.department === department)
+        );
+      } else {
+        setError("Failed to fetch data");
+      }
+    } catch (err) {
+      setError("Error fetching data");
+    } finally {
+      setLoading(false);
     }
-  } catch (err) {
-    setError("Error fetching data");
-  } finally {
-    setLoading(false);
-  }
-};
-
-useEffect(() => {
-  const interval = setInterval(() => {
-    setPermissions((prevPermissions) =>
-      prevPermissions.map((perm) => ({
-        ...perm,
-        timeRemaining: calculateTimeRemaining(perm.endTime),
-      }))
-    );
-  }, 1000); // Update every second
-
-  return () => clearInterval(interval);
-}, []); // Remove `permissions` from dependencies
-
-
-
+  };
 
   const deletePermission = async (id) => {
     if (!window.confirm("Are you sure you want to delete this permission?")) return;
@@ -113,11 +101,12 @@ useEffect(() => {
         `https://tkrc-backend.vercel.app/Attendance/permissions/${id}`,
         {
           method: "DELETE",
+          headers: { Authorization: `Bearer ${token}` } // Attach Token
         }
       );
       const data = await response.json();
       if (data.success) {
-        setPermissions(permissions.filter((permission) => permission._id !== id));
+        setPermissions((prev) => prev.filter((permission) => permission._id !== id));
       } else {
         alert("Failed to delete permission");
       }
@@ -134,11 +123,12 @@ useEffect(() => {
         `https://tkrc-backend.vercel.app/Attendance/permissions/${id}`,
         {
           method: "DELETE",
+          headers: { Authorization: `Bearer ${token}` } // Attach Token
         }
       );
       const data = await response.json();
       if (data.success) {
-        setPermissions(permissions.filter((permission) => permission._id !== id));
+        setPermissions((prev) => prev.filter((permission) => permission._id !== id));
       } else {
         alert("Failed to cancel permission");
       }
@@ -163,7 +153,6 @@ useEffect(() => {
               <th>Section</th>
               <th>Start Date</th>
               <th>End Date</th>
-              
               <th>Time Remaining for Edit</th>
               <th>Actions</th>
             </tr>
