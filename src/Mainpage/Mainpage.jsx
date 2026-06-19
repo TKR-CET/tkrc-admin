@@ -9,22 +9,34 @@ const Mainpage = () => {
   const [role, setRole] = useState(null);
   const navigate = useNavigate();
 
+  // Retrieve the secure details from localStorage
   const facultyId = localStorage.getItem("facultyId");
+  const loginId = localStorage.getItem("loginId"); 
+  const token = localStorage.getItem("token"); // Get JWT
 
   useEffect(() => {
     const fetchFacultyRole = async () => {
-      if (!facultyId) return;
+      // Ensure we have the necessary IDs and Token before making the request
+      if (!loginId || !token) return;
+      
       try {
+        // Updated to the new /admin endpoint and attached the JWT token
         const response = await axios.get(
-          `https://tkrc-backend.vercel.app/faculty/facultyprofile/${facultyId}`
+          `https://tkrc-backend.vercel.app/admin/facultyprofile/${loginId}`, {
+            headers: { Authorization: `Bearer ${token}` }
+          }
         );
         setRole(response.data.role);
       } catch (error) {
         console.error("Error fetching faculty details:", error);
+        // Automatically log out if the token has expired or is invalid
+        if (error.response && error.response.status === 401) {
+          handleLogout();
+        }
       }
     };
     fetchFacultyRole();
-  }, [facultyId]);
+  }, [loginId, token]);
 
   const toggleMenu = (menu) => {
     setActiveMenu(activeMenu === menu ? null : menu);
@@ -35,7 +47,11 @@ const Mainpage = () => {
   };
 
   const handleLogout = () => {
+    // Clear ALL secure items from localStorage on logout
     localStorage.removeItem("facultyId");
+    localStorage.removeItem("loginId");
+    localStorage.removeItem("token");
+    localStorage.removeItem("studentId");
     navigate("/");
   };
 
