@@ -241,3 +241,4 @@ const FacultyTable = () => {
 };
 
 export default FacultyTable;
+ 
