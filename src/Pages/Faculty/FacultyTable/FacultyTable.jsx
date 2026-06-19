@@ -3,13 +3,16 @@ import axios from "axios";
 import "./FacultyTable.css";
 
 const FacultyTable = () => {
-    const [department, setDepartment] = useState("EEE"); // Default Department
+    const [department, setDepartment] = useState("EEE"); 
     const [facultyList, setFacultyList] = useState([]);
     const [facultyId, setFacultyId] = useState("");
     const [facultyDetails, setFacultyDetails] = useState(null);
     const [timetable, setTimetable] = useState([]);
     const [error, setError] = useState("");
     const [userDepartment, setUserDepartment] = useState("");
+
+    const token = localStorage.getItem("token"); // Retrieve JWT token
+    const loginId = localStorage.getItem("loginId") || localStorage.getItem("facultyId");
 
     useEffect(() => {
         fetchUserDepartment();
@@ -22,15 +25,16 @@ const FacultyTable = () => {
     }, [userDepartment, department]);
 
     const fetchUserDepartment = async () => {
-        const facultyId = localStorage.getItem("facultyId");
-        if (facultyId) {
+        if (loginId) {
             try {
                 const response = await axios.get(
-                    `https://tkrc-backend.vercel.app/faculty/facultyprofile/${facultyId}`
+                    `https://tkrc-backend.vercel.app/admin/facultyprofile/${loginId}`, {
+                        headers: { Authorization: `Bearer ${token}` } // Attach Token
+                    }
                 );
-                const department = response.data.department.toUpperCase();
-                setUserDepartment(department);
-                setDepartment(department !== "ALL" ? department : "CSD"); // Default to first available
+                const fetchedDepartment = response.data.department.toUpperCase();
+                setUserDepartment(fetchedDepartment);
+                setDepartment(fetchedDepartment !== "ALL" ? fetchedDepartment : "CSD"); 
             } catch (error) {
                 console.error("Error fetching user department:", error);
             }
@@ -40,10 +44,12 @@ const FacultyTable = () => {
     const fetchFacultyByDepartment = async (dept) => {
         try {
             const response = await axios.get(
-                `https://tkrc-backend.vercel.app/faculty/department/${dept}`
+                `https://tkrc-backend.vercel.app/faculty/department/${dept}`, {
+                    headers: { Authorization: `Bearer ${token}` } // Attach Token
+                }
             );
             setFacultyList(response.data || []);
-            setFacultyId(""); // Reset faculty selection
+            setFacultyId(""); 
         } catch (error) {
             console.error("Error fetching faculty list:", error);
             setFacultyList([]);
@@ -63,13 +69,17 @@ const FacultyTable = () => {
         try {
             // Fetch Faculty Profile
             const facultyResponse = await axios.get(
-                `https://tkrc-backend.vercel.app/faculty/facultyId/${facultyId}`
+                `https://tkrc-backend.vercel.app/faculty/facultyId/${facultyId}`, {
+                    headers: { Authorization: `Bearer ${token}` } // Attach Token
+                }
             );
             setFacultyDetails(facultyResponse.data);
 
             // Fetch Faculty Timetable
             const timetableResponse = await axios.get(
-                `https://tkrc-backend.vercel.app/faculty/facultyId/${facultyId}/timetable`
+                `https://tkrc-backend.vercel.app/faculty/facultyId/${facultyId}/timetable`, {
+                    headers: { Authorization: `Bearer ${token}` } // Attach Token
+                }
             );
 
             if (timetableResponse.data?.timetable?.length > 0) {
@@ -87,7 +97,6 @@ const FacultyTable = () => {
         e.target.src = "/images/logo.png";
     };
 
-    // Merge consecutive periods with the same subject
     const processPeriods = (periods) => {
         const mergedPeriods = [];
         let i = 0;
@@ -110,13 +119,12 @@ const FacultyTable = () => {
         return mergedPeriods;
     };
 
-    const currentYear = new Date().getFullYear(); // Get the current year
+    const currentYear = new Date().getFullYear(); 
 
     return (
         <div className="faculty-table-container">
             <h2>Faculty Timetable</h2>
 
-            {/* Department Selection */}
             <div className="input-container">
                 <label>Department:</label>
                 <select 
@@ -140,7 +148,6 @@ const FacultyTable = () => {
                 </select>
             </div>
 
-            {/* Faculty Selection Dropdown */}
             <div className="input-container">
                 <label>Faculty:</label>
                 <select value={facultyId} onChange={(e) => setFacultyId(e.target.value)}>
@@ -156,7 +163,6 @@ const FacultyTable = () => {
 
             {error && <p className="error-message">{error}</p>}
 
-            {/* Faculty Details Section */}
             {facultyDetails && (
                 <section className="faculty-profile">
                     <table className="profile-table">
@@ -186,7 +192,6 @@ const FacultyTable = () => {
                 </section>
             )}
 
-            {/* Timetable Section */}
             <h2 className="timetable-heading">Time Table - ODD Semester ({currentYear}-{currentYear + 1})</h2>
             <section className="timetable-content">
                 {timetable.length === 0 ? (
