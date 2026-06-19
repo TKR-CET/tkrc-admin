@@ -24,13 +24,17 @@ const FetchTimetable = () => {
     "3:20-4:20",
   ];
 
+  const token = localStorage.getItem("token"); // Retrieve JWT token
+  const loginId = localStorage.getItem("loginId") || localStorage.getItem("facultyId");
+
   useEffect(() => {
     const fetchUserDepartment = async () => {
-      const loginId = localStorage.getItem("facultyId");
       if (loginId) {
         try {
           const response = await axios.get(
-            `https://tkrc-backend.vercel.app/faculty/facultyprofile/${loginId}`
+            `https://tkrc-backend.vercel.app/admin/facultyprofile/${loginId}`, {
+              headers: { Authorization: `Bearer ${token}` } // Attach Token
+            }
           );
           const department = response.data.department.toUpperCase(); // Normalize to uppercase
           setUserDepartment(department);
@@ -49,7 +53,7 @@ const FetchTimetable = () => {
     };
 
     fetchUserDepartment();
-  }, []);
+  }, [loginId, token]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -63,7 +67,9 @@ const FetchTimetable = () => {
     const apiUrl = `https://tkrcet-backend-g3zu.onrender.com/Section/${formData.year}/${formData.department}/${formData.section}/timetable`;
 
     try {
-      const response = await axios.get(apiUrl);
+      const response = await axios.get(apiUrl, {
+        headers: { Authorization: `Bearer ${token}` } // Attach Token
+      });
       if (response.data.timetable) {
         setTimetable(response.data.timetable);
       } else {
