@@ -44,7 +44,8 @@ const AddStudent = () => {
       const formData = new FormData();
       formData.append("students", JSON.stringify(studentsWithExtraData));
 
-      const apiUrl = `https://tkrcet-backend-g3zu.onrender.com/Section/${year}/${department}/${section}/students`;
+      // UPDATED TO VERCEL URL
+      const apiUrl = `https://tkrc-backend.vercel.app/Section/${year}/${department}/${section}/students`;
 
       const response = await axios.post(apiUrl, formData, {
         headers: { 
