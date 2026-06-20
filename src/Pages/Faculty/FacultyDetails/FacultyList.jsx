@@ -3,7 +3,7 @@ import axios from "axios";
 import "./FacultyList.css"; 
 
 const FacultyList = () => {
-  const departments = ["CSE", "CSD", "IT", "ECE", "EEE", "MECH", "CIVIL"];
+  const departments = ["CSD", "CSE", "IT", "ECE", "EEE", "MECH", "CIVIL"];
 
   const [department, setDepartment] = useState("");
   const [userDepartment, setUserDepartment] = useState("");
