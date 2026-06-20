@@ -23,7 +23,6 @@ const FetchStudents = () => {
     const fetchUserDetails = async () => {
       if (loginId) {
         try {
-          // Updated to the correct admin profile endpoint
           const response = await axios.get(
             `https://tkrc-backend.vercel.app/admin/facultyprofile/${loginId}`, {
               headers: { Authorization: `Bearer ${token}` } // Attach Token
@@ -58,7 +57,8 @@ const FetchStudents = () => {
     setDeleteMessage("");
     setStudents([]);
 
-    const apiUrl = `https://tkrcet-backend-g3zu.onrender.com/Section/${formData.year}/${formData.department}/${formData.section}/students`;
+    // UPDATED TO VERCEL URL
+    const apiUrl = `https://tkrc-backend.vercel.app/Section/${formData.year}/${formData.department}/${formData.section}/students`;
 
     try {
       const response = await axios.get(apiUrl, {
@@ -80,7 +80,8 @@ const FetchStudents = () => {
     if (!window.confirm(`Are you sure you want to delete student ${rollNumber}?`)) return;
 
     try {
-      await axios.delete(`https://tkrcet-backend-g3zu.onrender.com/Section/students/${rollNumber}`, {
+      // UPDATED TO VERCEL URL
+      await axios.delete(`https://tkrc-backend.vercel.app/Section/students/${rollNumber}`, {
         headers: { Authorization: `Bearer ${token}` } // Attach Token
       });
       setStudents(students.filter((student) => student.rollNumber !== rollNumber));
