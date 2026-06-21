@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./FetchTimetable.css"; // Import CSS file
+import "./FetchTimetable.css"; 
 
 const FetchTimetable = () => {
   const [formData, setFormData] = useState({
@@ -12,7 +12,7 @@ const FetchTimetable = () => {
   const [timetable, setTimetable] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [userDepartment, setUserDepartment] = useState(""); // Stores user's department
+  const [userDepartment, setUserDepartment] = useState(""); 
 
   const timeSlots = [
     "9:40-10:40",
@@ -24,7 +24,7 @@ const FetchTimetable = () => {
     "3:20-4:20",
   ];
 
-  const token = localStorage.getItem("token"); // Retrieve JWT token
+  const token = localStorage.getItem("token"); 
   const loginId = localStorage.getItem("loginId") || localStorage.getItem("facultyId");
 
   useEffect(() => {
@@ -33,13 +33,12 @@ const FetchTimetable = () => {
         try {
           const response = await axios.get(
             `https://tkrc-backend.vercel.app/admin/facultyprofile/${loginId}`, {
-              headers: { Authorization: `Bearer ${token}` } // Attach Token
+              headers: { Authorization: `Bearer ${token}` } 
             }
           );
-          const department = response.data.department.toUpperCase(); // Normalize to uppercase
+          const department = response.data.department.toUpperCase(); 
           setUserDepartment(department);
 
-          // Restrict department selection if user doesn't have "ALL" access
           if (department !== "ALL") {
             setFormData((prevData) => ({
               ...prevData,
@@ -68,7 +67,7 @@ const FetchTimetable = () => {
 
     try {
       const response = await axios.get(apiUrl, {
-        headers: { Authorization: `Bearer ${token}` } // Attach Token
+        headers: { Authorization: `Bearer ${token}` } 
       });
       if (response.data.timetable) {
         setTimetable(response.data.timetable);
@@ -86,7 +85,6 @@ const FetchTimetable = () => {
     <div className="timetable-container">
       <h2 className="timetable-title">Timetable</h2>
 
-      {/* Dropdowns for Year, Department, and Section */}
       <div className="form-group">
         <label>Year:</label>
         <select name="year" value={formData.year} onChange={handleChange}>
@@ -103,7 +101,7 @@ const FetchTimetable = () => {
           name="department"
           value={formData.department}
           onChange={handleChange}
-          disabled={userDepartment !== "ALL"} // Disable if user has department restrictions
+          disabled={userDepartment !== "ALL"} 
         >
           {userDepartment === "ALL" ? (
             <>
@@ -133,11 +131,9 @@ const FetchTimetable = () => {
 
       <button onClick={fetchTimetable} className="fetch-button">Fetch Timetable</button>
 
-      {/* Messages */}
       {loading && <p className="loading-message">Loading...</p>}
       {error && <p className="error-message" style={{color: "red"}}>{error}</p>}
 
-      {/* Display Timetable in Table Format */}
       {timetable.length > 0 && (
         <div className="timetable-table-container">
           <h3>Timetable</h3>
@@ -155,8 +151,8 @@ const FetchTimetable = () => {
                 <tr key={day._id || day.day}>
                   <td className="day-column" style={{ fontWeight: "bold" }}>{day.day}</td>
                   {timeSlots.map((_, periodIndex) => {
-                    
-                    // Explicitly handle Lunch Break at Index 3 (12:40 - 1:20)
+
+                    // Hardcode Lunch at Index 3
                     if (periodIndex === 3) {
                       return (
                         <td key={periodIndex} className="period-column" style={{ backgroundColor: "#ffefc1", fontWeight: "bold" }}>
@@ -165,9 +161,10 @@ const FetchTimetable = () => {
                       );
                     }
 
-                    // For all other periods, map to the database periodNumber
-                    const periodNumber = periodIndex + 1;
-                    const period = day.periods.find((p) => p.periodNumber === periodNumber);
+                    // Fix mapping: Before lunch (indices 0,1,2) maps to DB periods 1,2,3. 
+                    // After lunch (indices 4,5,6) maps to DB periods 4,5,6.
+                    const dbPeriodNumber = periodIndex < 3 ? periodIndex + 1 : periodIndex;
+                    const period = day.periods.find((p) => p.periodNumber === dbPeriodNumber);
 
                     return (
                       <td key={periodIndex} className="period-column">
