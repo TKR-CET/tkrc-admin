@@ -64,7 +64,8 @@ const FetchTimetable = () => {
     setError("");
     setTimetable([]);
 
-    const apiUrl = `https://tkrcet-backend-g3zu.onrender.com/Section/${formData.year}/${formData.department}/${formData.section}/timetable`;
+    // UPDATED TO SECURE VERCEL URL
+    const apiUrl = `https://tkrc-backend.vercel.app/Section/${formData.year}/${formData.department}/${formData.section}/timetable`;
 
     try {
       const response = await axios.get(apiUrl, {
@@ -135,7 +136,7 @@ const FetchTimetable = () => {
 
       {/* Messages */}
       {loading && <p className="loading-message">Loading...</p>}
-      {error && <p className="error-message">{error}</p>}
+      {error && <p className="error-message" style={{color: "red"}}>{error}</p>}
 
       {/* Display Timetable in Table Format */}
       {timetable.length > 0 && (
