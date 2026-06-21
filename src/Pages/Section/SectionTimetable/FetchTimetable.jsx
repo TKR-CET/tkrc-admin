@@ -18,7 +18,7 @@ const FetchTimetable = () => {
     "9:40-10:40",
     "10:40-11:40",
     "11:40-12:40",
-    "12:40-1:20",
+    "12:40-1:20", // Index 3 is Lunch
     "1:20-2:20",
     "2:20-3:20",
     "3:20-4:20",
@@ -64,7 +64,6 @@ const FetchTimetable = () => {
     setError("");
     setTimetable([]);
 
-    // UPDATED TO SECURE VERCEL URL
     const apiUrl = `https://tkrc-backend.vercel.app/Section/${formData.year}/${formData.department}/${formData.section}/timetable`;
 
     try {
@@ -153,13 +152,40 @@ const FetchTimetable = () => {
             </thead>
             <tbody>
               {timetable.map((day) => (
-                <tr key={day._id}>
-                  <td className="day-column">{day.day}</td>
+                <tr key={day._id || day.day}>
+                  <td className="day-column" style={{ fontWeight: "bold" }}>{day.day}</td>
                   {timeSlots.map((_, periodIndex) => {
-                    const period = day.periods.find((p) => p.periodNumber === periodIndex + 1);
+                    
+                    // Explicitly handle Lunch Break at Index 3 (12:40 - 1:20)
+                    if (periodIndex === 3) {
+                      return (
+                        <td key={periodIndex} className="period-column" style={{ backgroundColor: "#ffefc1", fontWeight: "bold" }}>
+                          LUNCH
+                        </td>
+                      );
+                    }
+
+                    // For all other periods, map to the database periodNumber
+                    const periodNumber = periodIndex + 1;
+                    const period = day.periods.find((p) => p.periodNumber === periodNumber);
+
                     return (
                       <td key={periodIndex} className="period-column">
-                        {period ? period.subject : periodIndex === 3 ? <strong>LUNCH</strong> : ""}
+                        {period ? (
+                          <div style={{ lineHeight: "1.4" }}>
+                            <strong>{period.subject}</strong>
+                            {period.facultyName && period.facultyName !== "Unknown" && (
+                              <>
+                                <br />
+                                <span style={{ fontSize: "0.85em", color: "#555" }}>
+                                  {period.facultyName}
+                                </span>
+                              </>
+                            )}
+                          </div>
+                        ) : (
+                          <span style={{ color: "#ccc" }}>-</span>
+                        )}
                       </td>
                     );
                   })}
