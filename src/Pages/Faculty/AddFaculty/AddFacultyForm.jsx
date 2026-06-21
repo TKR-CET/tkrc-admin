@@ -6,7 +6,7 @@ const AddFacultyForm = () => {
   const [formData, setFormData] = useState({
     name: "",
     facultyId: "",
-    role: "",
+    role: "faculty", // Defaulted to faculty
     department: "",
     subject: "",
     designation: "",
@@ -16,15 +16,13 @@ const AddFacultyForm = () => {
     jntuId: "",
     phoneNumber: "", 
     password: "",
-    timetable: "",
   });
 
   const [image, setImage] = useState(null);
   const [responseMessage, setResponseMessage] = useState("");
-  const [timetableError, setTimetableError] = useState("");
   const [phoneError, setPhoneError] = useState("");
 
-  const token = localStorage.getItem("token"); // Retrieve JWT token
+  const token = localStorage.getItem("token"); // Retrieve Admin JWT token
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -51,13 +49,6 @@ const AddFacultyForm = () => {
     if (phoneError) return; 
 
     try {
-      const parsedTimetable = JSON.parse(formData.timetable);
-      if (!Array.isArray(parsedTimetable)) {
-        setTimetableError("Timetable must be an array");
-        return;
-      }
-      setTimetableError("");
-
       const data = new FormData();
       Object.keys(formData).forEach((key) => {
         data.append(key, formData[key]);
@@ -65,30 +56,34 @@ const AddFacultyForm = () => {
 
       if (image) data.append("image", image);
 
+      // UPDATED TO SECURE VERCEL URL
       const response = await axios.post(
-        "https://tkrc-backend.vercel.app/faculty/addfaculty",
+        "https://tkrc-backend.vercel.app/admin/addfacultyprofile", 
         data,
         { 
           headers: { 
             "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}` // Attach Token
+            Authorization: `Bearer ${token}` 
           } 
         }
       );
 
-      setResponseMessage(response.data.message);
+      setResponseMessage(response.data.message || "Faculty created! Timetable will populate on Section upload.");
+      
+      // Optional: Clear form on success
+      setFormData({
+        name: "", facultyId: "", role: "faculty", department: "", subject: "", designation: "",
+        qualification: "", experience: "", areaOfInterest: "", jntuId: "", phoneNumber: "", password: "",
+      });
+      setImage(null);
     } catch (error) {
-      if (error instanceof SyntaxError) {
-        setTimetableError("Invalid JSON format for timetable");
-      } else {
-        setResponseMessage(error.response?.data?.message || "Error adding faculty");
-      }
+      setResponseMessage(error.response?.data?.message || "Error adding faculty");
     }
   };
 
   return (
     <div className="add-faculty-container">
-      <h2>Add Faculty</h2>
+      <h2>Add Faculty Profile</h2>
       <form onSubmit={handleSubmit} className="faculty-form">
         {[
           { label: "Name", name: "name", type: "text" },
@@ -114,30 +109,17 @@ const AddFacultyForm = () => {
               onChange={handleChange}
               required
             />
-            {name === "phoneNumber" && phoneError && <p className="error-message">{phoneError}</p>}
+            {name === "phoneNumber" && phoneError && <p className="error-message" style={{color: "red"}}>{phoneError}</p>}
           </div>
         ))}
-
-        <div className="input-group">
-          <label htmlFor="timetable">Timetable:</label>
-          <textarea
-            id="timetable"
-            name="timetable"
-            value={formData.timetable}
-            onChange={handleChange}
-            placeholder='[{ "day": "Monday", "periods": [...] }, ...]'
-            required
-          />
-          {timetableError && <p className="error-message">{timetableError}</p>}
-        </div>
 
         <div className="input-group">
           <label htmlFor="image">Profile Image:</label>
           <input type="file" id="image" accept="image/*" onChange={handleImageChange} />
         </div>
 
-        <button type="submit" className="submit-btn" disabled={timetableError || phoneError}>
-          Add Faculty
+        <button type="submit" className="submit-btn" disabled={phoneError}>
+          Create Faculty Profile
         </button>
       </form>
 
