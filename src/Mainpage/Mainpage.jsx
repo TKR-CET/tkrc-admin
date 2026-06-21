@@ -18,7 +18,7 @@ const Mainpage = () => {
     const fetchFacultyRole = async () => {
       // Ensure we have the necessary IDs and Token before making the request
       if (!loginId || !token) return;
-      
+
       try {
         // Updated to the new /admin endpoint and attached the JWT token
         const response = await axios.get(
@@ -100,8 +100,16 @@ const Mainpage = () => {
               </li>
             )}
 
-            {/* Section Timetable */}
-            <li><Link to="/main/studentTable" onClick={closeSidebar}>Section Timetable</Link></li>
+            {/* Section Timetable Dropdown */}
+            <li className={activeMenu === "sectionTimetable" ? "active" : ""}>
+              <span onClick={() => toggleMenu("sectionTimetable")}>Section Timetable</span>
+              <ul className="submenu">
+                {role !== "HOD" && role !== "hod" && (
+                  <li><Link to="/main/addTimetable" onClick={closeSidebar}>Add Timetable</Link></li>
+                )}
+                <li><Link to="/main/studentTable" onClick={closeSidebar}>View Timetable</Link></li>
+              </ul>
+            </li>
 
             {/* Edit Option Enabling */}
             {role !== "HOD" && role !== "hod" && (
