@@ -3,10 +3,11 @@ import axios from "axios";
 import "./AddFacultyForm.css"; 
 
 const AddFacultyForm = () => {
+  // 1. Cleaned up state: No more 'timetable' field here!
   const [formData, setFormData] = useState({
     name: "",
     facultyId: "",
-    role: "faculty", // Defaulted to faculty
+    role: "faculty", 
     department: "",
     subject: "",
     designation: "",
@@ -27,6 +28,7 @@ const AddFacultyForm = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
+    // Validate 10-digit phone number dynamically
     if (name === "phoneNumber") {
       const phoneRegex = /^[0-9]{10}$/;
       if (!phoneRegex.test(value)) {
@@ -56,9 +58,9 @@ const AddFacultyForm = () => {
 
       if (image) data.append("image", image);
 
-      // UPDATED TO SECURE VERCEL URL
+      // 2. FIXED API URL: Points to the correct /faculty/addfaculty route!
       const response = await axios.post(
-        "https://tkrc-backend.vercel.app/admin/addfacultyprofile", 
+        "https://tkrc-backend.vercel.app/faculty/addfaculty", 
         data,
         { 
           headers: { 
@@ -68,16 +70,21 @@ const AddFacultyForm = () => {
         }
       );
 
-      setResponseMessage(response.data.message || "Faculty created! Timetable will populate on Section upload.");
+      setResponseMessage(response.data.message || "Faculty created! Timetable will populate when Section is uploaded.");
       
-      // Optional: Clear form on success
+      // Clear form on success
       setFormData({
         name: "", facultyId: "", role: "faculty", department: "", subject: "", designation: "",
         qualification: "", experience: "", areaOfInterest: "", jntuId: "", phoneNumber: "", password: "",
       });
       setImage(null);
+      
+      // Clear out the file input visually
+      document.getElementById("image").value = "";
+
     } catch (error) {
-      setResponseMessage(error.response?.data?.message || "Error adding faculty");
+      console.error("Upload Error:", error);
+      setResponseMessage(error.response?.data?.message || "Error adding faculty. Please check your connection.");
     }
   };
 
@@ -109,7 +116,7 @@ const AddFacultyForm = () => {
               onChange={handleChange}
               required
             />
-            {name === "phoneNumber" && phoneError && <p className="error-message" style={{color: "red"}}>{phoneError}</p>}
+            {name === "phoneNumber" && phoneError && <p className="error-message" style={{color: "red", fontSize: "0.85rem", marginTop: "5px"}}>{phoneError}</p>}
           </div>
         ))}
 
@@ -123,7 +130,11 @@ const AddFacultyForm = () => {
         </button>
       </form>
 
-      {responseMessage && <p className="response-message">{responseMessage}</p>}
+      {responseMessage && (
+        <p className="response-message" style={{ color: responseMessage.includes("Error") ? "red" : "green", marginTop: "15px", textAlign: "center", fontWeight: "bold" }}>
+          {responseMessage}
+        </p>
+      )}
     </div>
   );
 };
