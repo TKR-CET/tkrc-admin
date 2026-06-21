@@ -7,6 +7,10 @@ import AddFacultyForm from "./Pages/Faculty/AddFaculty/AddFacultyForm.jsx";
 import FacultyList from "./Pages/Faculty/FacultyDetails/FacultyList.jsx";
 import FacultyTable from "./Pages/Faculty/FacultyTable/FacultyTable.jsx";
 import AddStudent from "./Pages/Student/AddStudent/AddStudent.jsx";
+
+
+import AddStudent from "./Pages/Student/AddStudent/AddSectionTimetable.jsx";
+
 import FetchStudents from "./Pages/Student/StudentDetails/FetchStudents.jsx";
 import FetchTimetable from "./Pages/Section/SectionTimetable/FetchTimetable.jsx";
 import AttendanceSummary from "./Pages/Attendance/SectionAttendance/AttendanceSummary.jsx";
