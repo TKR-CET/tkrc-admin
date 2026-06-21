@@ -8,8 +8,8 @@ import FacultyList from "./Pages/Faculty/FacultyDetails/FacultyList.jsx";
 import FacultyTable from "./Pages/Faculty/FacultyTable/FacultyTable.jsx";
 import AddStudent from "./Pages/Student/AddStudent/AddStudent.jsx";
 
-
-import AddStudent from "./Pages/Student/AddStudent/AddSectionTimetable.jsx";
+// Fixed import name to match the component
+import AddSectionTimetable from "./Pages/Student/AddStudent/AddSectionTimetable.jsx";
 
 import FetchStudents from "./Pages/Student/StudentDetails/FetchStudents.jsx";
 import FetchTimetable from "./Pages/Section/SectionTimetable/FetchTimetable.jsx";
@@ -31,19 +31,26 @@ function App() {
         <Route path="/main/*" element={<Mainpage />}>
           {/* Default route inside /main/ */}
           <Route index element={<Sample />} />
-          
+
           {/* Other nested routes */}
           <Route path="addfaculty" element={<AddFacultyForm />} />
           <Route path="facultylist" element={<FacultyList />} />
           <Route path="facultytable" element={<FacultyTable />} />
+          
           <Route path="addstudent" element={<AddStudent />} />
           <Route path="studentDetails" element={<FetchStudents />} />
+          
+          {/* Added the new Add Timetable Route */}
+          <Route path="addTimetable" element={<AddSectionTimetable />} />
           <Route path="studentTable" element={<FetchTimetable />} />
+          
           <Route path="attendance" element={<AttendanceSummary />} />
           <Route path="grant" element={<GrantPermission />} />
+          <Route path="permission" element={<PermissionList />} />
+          
           <Route path="student" element={<StudentAttendance />} />
           <Route path="daily" element={<DailyAttendance />} />
-          <Route path="permission" element={<PermissionList />} />
+          
           <Route path="sample" element={<Sample />} />
         </Route>
       </Routes>
