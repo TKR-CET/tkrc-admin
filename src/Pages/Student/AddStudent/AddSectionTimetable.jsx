@@ -10,6 +10,9 @@ const AddSectionTimetable = () => {
   const [section, setSection] = useState("A");
   const [responseMessage, setResponseMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  
+  // New state to toggle the format image visibility
+  const [showFormatImage, setShowFormatImage] = useState(false);
 
   const token = localStorage.getItem("token"); // Retrieve Admin JWT token
 
@@ -97,7 +100,7 @@ const AddSectionTimetable = () => {
       <p style={{textAlign: "center", marginBottom: "20px", color: "#555"}}>
         Uploading this timetable will automatically assign classes to the respective Faculty's schedules.
       </p>
-      
+
       <form onSubmit={handleSubmit} className="student-form">
         <div className="form-group">
           <label>Year:</label>
@@ -137,7 +140,26 @@ const AddSectionTimetable = () => {
           <input type="file" accept=".xlsx, .xls" onChange={handleExcelUpload} required />
           <small style={{display: "block", marginTop: "5px", color: "#888"}}>
             Expected Headers: <b>Day, Period 1 Subject, Period 1 FacultyId, Period 2 Subject...</b>
+            {" | "}
+            <span 
+              onClick={() => setShowFormatImage(!showFormatImage)} 
+              style={{ color: "#007BFF", cursor: "pointer", textDecoration: "underline", fontWeight: "bold" }}
+            >
+              {showFormatImage ? "Hide Expected Format" : "View Expected Format"}
+            </span>
           </small>
+          
+          {/* Conditionally rendered image container */}
+          {showFormatImage && (
+            <div style={{ marginTop: "15px", textAlign: "center" }}>
+              <p style={{ fontSize: "12px", color: "#555", marginBottom: "5px" }}>Reference Image for Excel Columns:</p>
+              <img 
+                src="https://res.cloudinary.com/dppiuypop/image/upload/v1782094546/uploads/subbyzml8zaiyhlrauas.png" 
+                alt="Expected Excel Format" 
+                style={{ maxWidth: "100%", height: "auto", border: "1px solid #ccc", borderRadius: "4px" }}
+              />
+            </div>
+          )}
         </div>
 
         <button type="submit" className="submit-button" disabled={isLoading}>
